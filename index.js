@@ -10,15 +10,16 @@ let playerPos = null;
 let unitvector = null;
 let pingList = [];
 let temp = 0;
+let delete_Waypoint_after = 1000; //default set to 1000ms
 
 //renders pings
 register('renderWorld', () => {
     for (let i = 0; i < pingList.length; i++) {
-        RenderLib.drawInnerEspBox(Math.floor(pingList[i].getX())+0.5, Math.floor(pingList[i].getY()), Math.floor(pingList[i].getZ())+0.5, 1, 1, 0, 0, 1, 1, true);
+        RenderLib.drawInnerEspBox(Math.floor(pingList[i].getX()) + 0.5, Math.floor(pingList[i].getY()), Math.floor(pingList[i].getZ()) + 0.5, 1, 1, 0, 0, 1, 1, true);
         if (pingList[i].getText() == null || pingList[i].getText() == "null") {
-            Tessellator.drawString(pingList[i].getName(), Math.floor(pingList[i].getX())+0.5, Math.floor(pingList[i].getY())+1, Math.floor(pingList[i].getZ())+0.5);
+            Tessellator.drawString(pingList[i].getName(), Math.floor(pingList[i].getX()) + 0.5, Math.floor(pingList[i].getY()) + 1, Math.floor(pingList[i].getZ()) + 0.5);
         } else {
-            Tessellator.drawString(pingList[i].getText(), Math.floor(pingList[i].getX())+0.5, Math.floor(pingList[i].getY())+1, Math.floor(pingList[i].getZ())+0.5);
+            Tessellator.drawString(pingList[i].getText(), Math.floor(pingList[i].getX()) + 0.5, Math.floor(pingList[i].getY()) + 1, Math.floor(pingList[i].getZ()) + 0.5);
         }
     }
 });
@@ -30,22 +31,22 @@ register("command", (user, text) => {
     }
     if (text == null) {
         text = "null";
-    } 
-    
-    playerPos = new Vector(Player.getX(),Player.getY() + 1.62,Player.getZ());
-    yaw = Player.getYaw()*Math.PI/180;
-    pitch = Player.getPitch()*Math.PI/180;
-    unitvector = new Vector(-Math.sin(yaw) * Math.cos(pitch),-Math.sin(pitch),Math.cos(yaw) * Math.cos(pitch));
+    }
+
+    playerPos = new Vector(Player.getX(), Player.getY() + 1.62, Player.getZ());
+    yaw = Player.getYaw() * Math.PI / 180;
+    pitch = Player.getPitch() * Math.PI / 180;
+    unitvector = new Vector(-Math.sin(yaw) * Math.cos(pitch), -Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch));
     testBlock = new Vector(playerPos.getX(), playerPos.getY(), playerPos.getZ());
-    
+
     //creates a ray
     while (true) {
-        distance = Math.sqrt(Math.pow(playerPos.x - testBlock.getX(),2) + Math.pow(playerPos.y - testBlock.getY(),2) + Math.pow(playerPos.z - testBlock.getZ(),2))
+        distance = Math.sqrt(Math.pow(playerPos.x - testBlock.getX(), 2) + Math.pow(playerPos.y - testBlock.getY(), 2) + Math.pow(playerPos.z - testBlock.getZ(), 2))
         testBlock.add(unitvector);
-        if (World.getBlockAt(Math.floor(testBlock.getX()),Math.floor(testBlock.getY()),Math.floor(testBlock.getZ())).getType() != "BlockType{name=minecraft:air}" || testBlock.getY() > 300 || testBlock.getY() < 0 ) {
+        if (World.getBlockAt(Math.floor(testBlock.getX()), Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())).getType() != "BlockType{name=minecraft:air}" || testBlock.getY() > 300 || testBlock.getY() < 0) {
             break;
         }
-        
+
         if (range != -1 && distance >= range) {
             break;
         }
@@ -53,12 +54,12 @@ register("command", (user, text) => {
     //posting in chat
     if (testBlock.getY() < 300 && testBlock.getY() > 0 && range == -1) {
         ChatLib.chat("Block at: " + Math.floor(testBlock.getX()) + ", " + Math.floor(testBlock.getY()) + ", " + Math.floor(testBlock.getZ()) + " is: " + World.getBlockAt(Math.floor(testBlock.getX()), Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())).getType().getName());
-        ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ", t: " + text + ". /CU");
-        
+        ChatLib.command("pc " + "x: " + Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY()) + ", z: " + Math.floor(testBlock.getZ()) + ", t: " + text + ". /CU");
+
     } else if (testBlock.getY() < 300 && testBlock.getY() > 0) {
         ChatLib.chat("Block at: " + Math.floor(testBlock.getX()) + ", " + Math.floor(testBlock.getY()) + ", " + Math.floor(testBlock.getZ()) + " is: " + World.getBlockAt(Math.floor(testBlock.getX()), Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())).getType().getName());
-        ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ", t: " + text + ". /CU");
-        
+        ChatLib.command("pc " + "x: " + Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY()) + ", z: " + Math.floor(testBlock.getZ()) + ", t: " + text + ". /CU");
+
     } else {
         ChatLib.chat("No block found within maximum height.");
     }
@@ -66,9 +67,11 @@ register("command", (user, text) => {
     for (let i = 0; i < pingList.length; i++) {
         if (pingList[i].getName() == Player.getName()) {
             if (text == "null") {
-                pingList[i] = new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName());
+                pingList[i] = new Vector(testBlock.getX(), testBlock.getY(), testBlock.getZ(), Player.getName());
+                setTimeout(pingList.shift(), 100);
             } else {
-                pingList[i] = new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName(), text);
+                pingList[i] = new Vector(testBlock.getX(), testBlock.getY(), testBlock.getZ(), Player.getName(), text);
+                ChatLib.chat(pingList[i]);
             }
             temp = 1;
             break;
@@ -76,12 +79,19 @@ register("command", (user, text) => {
     }
     if (temp == 0) {
         if (text == "null") {
-            pingList.push(new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName()));
+
+            pingList.push(new Vector(testBlock.getX(), testBlock.getY(), testBlock.getZ(), Player.getName()));
+            setTimeout(() => {
+                pingList.shift();
+            }, delete_Waypoint_after);
         } else {
-            pingList.push(new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName(), text));
+            pingList.push(new Vector(testBlock.getX(), testBlock.getY(), testBlock.getZ(), Player.getName(), text));
+            setTimeout(() => {
+                pingList.shift();
+            }, delete_Waypoint_after);
         }
     }
-   
+
 }).setName("infos"); // use /infos ingame to get info!! btw i love people called makali
 
 //fetches waypoints from other users
@@ -91,9 +101,9 @@ register("chat", (temp1, rank, player, x, y, z, text, event) => {
         for (let i = 0; i < pingList.length; i++) {
             if (pingList[i].getName() == player) {
                 if (text == null || text == "" || text == " ") {
-                    pingList[i] = new Vector(x,y,z, player);
+                    pingList[i] = new Vector(x, y, z, player);
                 } else {
-                    pingList[i] = new Vector(x,y,z, player, text);
+                    pingList[i] = new Vector(x, y, z, player, text);
                 }
                 temp = 1;
                 break;
@@ -101,9 +111,9 @@ register("chat", (temp1, rank, player, x, y, z, text, event) => {
         }
         if (temp == 0) {
             if (text == null || text == "" || text == " ") {
-                pingList.push(new Vector(x,y,z, player));
+                pingList.push(new Vector(x, y, z, player));
             } else {
-                pingList.push(new Vector(x,y,z, player, text));
+                pingList.push(new Vector(x, y, z, player, text));
             }
         }
     }
@@ -134,7 +144,7 @@ class Vector {
     getX() {
         return this.x;
     }
-    
+
     getName() {
         return this.name;
     }
@@ -154,7 +164,7 @@ class Vector {
     setX(x) {
         this.x = x;
     }
-    
+
     setName(name) {
         this.name = name;
     }
