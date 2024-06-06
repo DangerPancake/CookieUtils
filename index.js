@@ -8,35 +8,24 @@ let yaw = 0;
 let pitch = 0;
 let playerPos = null;
 let unitvector = null;
-let pingBlock1 = null;
-let pingBlock2 = null;
-let pingBlock3 = null;
-let pingBlock4 = null;
+let pingList = [];
+let pingListNames = [];
 //let party = null;
 register('renderWorld', () => {
-    //if (party == null) {
-    //    party = new Party();
-    //}
     if (testBlock !== null) {
         RenderLib.drawEspBox(Math.floor(testBlock.getX())+0.5, Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())+0.5, 1, 1, 0, 0, 1, 1, true);
         Tessellator.drawString("Hello there!", Math.floor(testBlock.getX())+0.5, Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())+0.5);
     }
-    if (pingBlock1 !== null) {
-        RenderLib.drawEspBox(Math.floor(pingBlock1.getX())+0.5, Math.floor(pingBlock1.getY()), Math.floor(pingBlock1.getZ())+0.5, 1, 1, 0, 0, 1, 1, true);
+    if (pingList.length != 0) {
+        pingList.forEach(drawEsp);
     }
-    if (pingBlock2 !== null) {
-        RenderLib.drawEspBox(Math.floor(pingBlock2.getX())+0.5, Math.floor(pingBlock2.getY()), Math.floor(pingBlock2.getZ())+0.5, 1, 1, 0, 0, 1, 1, true);
-    }
-    if (pingBlock3 !== null) {
-        RenderLib.drawEspBox(Math.floor(pingBlock3.getX())+0.5, Math.floor(pingBlock3.getY()), Math.floor(pingBlock3.getZ())+0.5, 1, 1, 0, 0, 1, 1, true);
-    }
-    if (pingBlock4 !== null) {
-        RenderLib.drawEspBox(Math.floor(pingBlock4.getX())+0.5, Math.floor(pingBlock4.getY()), Math.floor(pingBlock4.getZ())+0.5, 1, 1, 0, 0, 1, 1, true);
-    }
-
-
-
+    
 });
+
+function drawEsp(value) {
+    RenderLib.drawEspBox(Math.floor(value.getX())+0.5, Math.floor(value.getY()), Math.floor(value.getZ())+0.5, 1, 1, 0, 0, 1, 1, true);
+    Tessellator.drawString("penis", Math.floor(value.getX())+0.5, Math.floor(value.getY()), Math.floor(value.getZ())+0.5);
+} 
 
 register("command", (user) => {
     if (user != null) {
@@ -78,7 +67,9 @@ register("command", (user) => {
 
 register("chat", (player, x, y, z, event) => {
     ChatLib.chat("rehehe " + player + " " + x + " " + y + " " + z);
-    pingBlock1 = new Vector(x, y, z);
+    pingList.push(new Vector(x,y,z));
+    pingListNames.push(player);
+    ChatLib.chat(pingListNames[0]);
 }).setCriteria("Party > ${player}: x: ${x}, y: ${y}, z: ${z}. Ping sent using CookieUtils");
 
 class Vector {
@@ -87,9 +78,19 @@ class Vector {
         this.y = y;
         this.z = z;
     }
+    constructor(x, y, z, name) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.name = name;
+    }
 
     getX() {
         return this.x;
+    }
+    
+    getName() {
+        return this.name;
     }
 
     getY() {
@@ -102,6 +103,10 @@ class Vector {
 
     setX(x) {
         this.x = x;
+    }
+    
+    setName(name) {
+        this.name = name;
     }
 
     setY(y) {
@@ -126,10 +131,4 @@ class Vector {
         return new Vector(this.x * scalar, this.y * scalar, this.z * scalar);
     }
 
-}
-
-class pingList {
-    constructor() {
-
-    }
 }
