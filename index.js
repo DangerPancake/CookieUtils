@@ -14,7 +14,7 @@ register('renderWorld', () => {
 
     for (let i = 0; i < pingList.length; i++) {
         RenderLib.drawEspBox(Math.floor(pingList[i].getX())+0.5, Math.floor(pingList[i].getY()), Math.floor(pingList[i].getZ())+0.5, 1, 1, 0, 0, 1, 1, true);
-        if (pingList[i].getText() == null) {
+        if (pingList[i].getText() == null || pingList[i].getText() == "null") {
             Tessellator.drawString(pingList[i].getName(), Math.floor(pingList[i].getX())+0.5, Math.floor(pingList[i].getY())+1, Math.floor(pingList[i].getZ())+0.5);
         } else {
             Tessellator.drawString(pingList[i].getText(), Math.floor(pingList[i].getX())+0.5, Math.floor(pingList[i].getY())+1, Math.floor(pingList[i].getZ())+0.5);
@@ -27,8 +27,8 @@ register("command", (user, text) => {
     if (user != null) {
         range = user;
     }
-    if (text == null || text == "null") {
-        text = "";
+    if (text == null) {
+        text = "null";
     } 
     
     playerPos = new Vector(Player.getX(),Player.getY() + 1.62,Player.getZ());
@@ -56,18 +56,18 @@ register("command", (user, text) => {
         ChatLib.chat("Block at: " + Math.floor(testBlock.getX()) + ", " + Math.floor(testBlock.getY()) + ", " + Math.floor(testBlock.getZ()) + " is: " + World.getBlockAt(Math.floor(testBlock.getX()), Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())).getType().getName());
         //ChatLib.command("pc " + Player.getName() + " is pinging!");
         if (text != "") {
-            ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ". /CU " + text);
+            ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ", t: " + text + ". /CU");
         } else {
-            ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ". /CU ");
+            ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ", t: null. /CU");
         }
         
     } else if (testBlock.getY() < 300 && testBlock.getY() > 0) {
         ChatLib.chat("Block at: " + Math.floor(testBlock.getX()) + ", " + Math.floor(testBlock.getY()) + ", " + Math.floor(testBlock.getZ()) + " is: " + World.getBlockAt(Math.floor(testBlock.getX()), Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())).getType().getName());
         //ChatLib.command("pc " + Player.getName() + " is pinging!");
         if (text != "") {
-            ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ". /CU " + text);
+            ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ", t: " + text + ". /CU");
         } else {
-            ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ". /CU ");
+            ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ", t: null. /CU");
         }
         
     } else {
@@ -76,20 +76,20 @@ register("command", (user, text) => {
     temp = 0;
     for (let i = 0; i < pingList.length; i++) {
         if (pingList[i].getName() == Player.getName()) {
-            if (text == null || text == "") {
-                //pingList[i] = new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName());
+            if (text == "null") {
+                pingList[i] = new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName());
             } else {
-                //pingList[i] = new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName(), text);
+                pingList[i] = new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName(), text);
             }
             temp = 1;
             break;
         }
     }
     if (temp == 0) {
-        if (text == null || text == "") {
-            //pingList.push(new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName()));
+        if (text == "null") {
+            pingList.push(new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName()));
         } else {
-            //pingList.push(new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName(), text));
+            pingList.push(new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName(), text));
         }
     }
    
@@ -97,7 +97,7 @@ register("command", (user, text) => {
 
 register("chat", (temp1, rank, player, x, y, z, text, event) => {
     ChatLib.chat("rehehe " + player + " " + x + " " + y + " " + z);
-    if (player == Player.getName()) {
+    if (player != Player.getName()) {
         temp = 0;
         for (let i = 0; i < pingList.length; i++) {
             if (pingList[i].getName() == player) {
@@ -120,7 +120,7 @@ register("chat", (temp1, rank, player, x, y, z, text, event) => {
     }
     
     
-}).setCriteria("${temp1} ${rank} ${player}: x: ${x}, y: ${y}, z: ${z}. /CU ${text}");
+}).setCriteria("${temp1} ${rank} ${player}: x: ${x}, y: ${y}, z: ${z}, t: ${text}. /CU");
 
 
 class Vector {
