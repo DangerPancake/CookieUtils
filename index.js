@@ -1,5 +1,4 @@
 import RenderLib from "../RenderLib/index.js";
-//import Party from "../Atomx/skyblock/Party.js";
 
 let testBlock = null;
 let range = -1;
@@ -9,35 +8,40 @@ let pitch = 0;
 let playerPos = null;
 let unitvector = null;
 let pingList = [];
-let pingListNames = [];
-//let party = null;
+let temp = 0;
+
+
 register('renderWorld', () => {
-    if (testBlock !== null) {
-        RenderLib.drawEspBox(Math.floor(testBlock.getX())+0.5, Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())+0.5, 1, 1, 0, 0, 1, 1, true);
-        Tessellator.drawString("Hello there!", Math.floor(testBlock.getX())+0.5, Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())+0.5);
-    }
-    if (pingList.length != 0) {
-        pingList.forEach(drawEsp);
+
+    for (let i = 0; i < pingList.length; i++) {
+        RenderLib.drawEspBox(Math.floor(pingList[i].getX())+0.5, Math.floor(pingList[i].getY()), Math.floor(pingList[i].getZ())+0.5, 1, 1, 0, 0, 1, 1, true);
+        if (pingList[i].getText() == null) {
+            Tessellator.drawString(pingList[i].getName(), Math.floor(pingList[i].getX())+0.5, Math.floor(pingList[i].getY())+1, Math.floor(pingList[i].getZ())+0.5);
+        } else {
+            Tessellator.drawString(pingList[i].getText(), Math.floor(pingList[i].getX())+0.5, Math.floor(pingList[i].getY())+1, Math.floor(pingList[i].getZ())+0.5);
+        }
     }
     
 });
 
-function drawEsp(value) {
-    RenderLib.drawEspBox(Math.floor(value.getX())+0.5, Math.floor(value.getY()), Math.floor(value.getZ())+0.5, 1, 1, 0, 0, 1, 1, true);
-    Tessellator.drawString("penis", Math.floor(value.getX())+0.5, Math.floor(value.getY()), Math.floor(value.getZ())+0.5);
-} 
-
-register("command", (user) => {
+register("command", (user, text) => {
     if (user != null) {
         range = user;
     }
-    //ChatLib.chat(Player.lookingAt());
+    if (text == null) {
+        text = "";
+    } 
+    
     playerPos = new Vector(Player.getX(),Player.getY() + 1.62,Player.getZ());
     yaw = Player.getYaw()*Math.PI/180;
     pitch = Player.getPitch()*Math.PI/180;
     unitvector = new Vector(-Math.sin(yaw) * Math.cos(pitch),-Math.sin(pitch),Math.cos(yaw) * Math.cos(pitch));
-
-    testBlock = new Vector(playerPos.getX(), playerPos.getY(), playerPos.getZ());
+    if (text == "") {
+        testBlock = new Vector(playerPos.getX(), playerPos.getY(), playerPos.getZ(), Player.getName());
+    } else {
+        testBlock = new Vector(playerPos.getX(), playerPos.getY(), playerPos.getZ(), text);
+    }
+    
     while (true) {
         distance = Math.sqrt(Math.pow(playerPos.x - testBlock.getX(),2) + Math.pow(playerPos.y - testBlock.getY(),2) + Math.pow(playerPos.z - testBlock.getZ(),2))
         testBlock.add(unitvector);
@@ -49,28 +53,66 @@ register("command", (user) => {
             break;
         }
     }
-
     if (testBlock.getY() < 300 && testBlock.getY() > 0 && range == -1) {
         ChatLib.chat("Block at: " + Math.floor(testBlock.getX()) + ", " + Math.floor(testBlock.getY()) + ", " + Math.floor(testBlock.getZ()) + " is: " + World.getBlockAt(Math.floor(testBlock.getX()), Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())).getType().getName());
         //ChatLib.command("pc " + Player.getName() + " is pinging!");
-        ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ". Ping sent using CookieUtils");
+        ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ". " + text + "/CU");
     } else if (testBlock.getY() < 300 && testBlock.getY() > 0) {
         ChatLib.chat("Block at: " + Math.floor(testBlock.getX()) + ", " + Math.floor(testBlock.getY()) + ", " + Math.floor(testBlock.getZ()) + " is: " + World.getBlockAt(Math.floor(testBlock.getX()), Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())).getType().getName());
         //ChatLib.command("pc " + Player.getName() + " is pinging!");
-        ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ". Ping sent using CookieUtils");
+        ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ". " + text + "/CU");
     } else {
         ChatLib.chat("No block found within maximum height.");
     }
-    //ChatLib.chat(party.getLeader());
+    temp = 0;
+    for (let i = 0; i < pingList.length; i++) {
+        if (pingList[i].getName() == Player.getName()) {
+            if (text == null || text == "") {
+                pingList[i] = new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName());
+            } else {
+                pingList[i] = new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName(), text);
+            }
+            temp = 1;
+            break;
+        }
+    }
+    if (temp == 0) {
+        if (text == null || text == "") {
+            pingList.push(new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName()));
+        } else {
+            pingList.push(new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName(), text));
+        }
+    }
    
 }).setName("infos"); // use /infos ingame to get info!! btw i love people called makali
 
-register("chat", (player, x, y, z, event) => {
+register("chat", (player, x, y, z, text, rank, event) => {
     ChatLib.chat("rehehe " + player + " " + x + " " + y + " " + z);
-    pingList.push(new Vector(x,y,z));
-    pingListNames.push(player);
-    ChatLib.chat(pingListNames[0]);
-}).setCriteria("Party > ${player}: x: ${x}, y: ${y}, z: ${z}. Ping sent using CookieUtils");
+    if (player != Player.getName()) {
+        temp = 0;
+        for (let i = 0; i < pingList.length; i++) {
+            if (pingList[i].getName() == player) {
+                if (text == null || text == "") {
+                    pingList[i] = new Vector(x,y,z, player);
+                } else {
+                    pingList[i] = new Vector(x,y,z, player, text);
+                }
+                temp = 1;
+                break;
+            }
+        }
+        if (temp == 0) {
+            if (text == null || text == "") {
+                pingList.push(new Vector(x,y,z, player));
+            } else {
+                pingList.push(new Vector(x,y,z, player, text));
+            }
+        }
+        
+    }
+    
+}).setCriteria("Party > ${rank} ${player}: x: ${x}, y: ${y}, z: ${z}. ${text}/CU");
+
 
 class Vector {
     constructor(x, y, z) {
@@ -83,6 +125,14 @@ class Vector {
         this.y = y;
         this.z = z;
         this.name = name;
+    }
+
+    constructor(x, y, z, name, text) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.name = name;
+        this.text = text;
     }
 
     getX() {
@@ -99,6 +149,10 @@ class Vector {
 
     getZ() {
         return this.z;
+    }
+
+    getText() {
+        return this.text;
     }
 
     setX(x) {
