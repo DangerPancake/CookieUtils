@@ -10,7 +10,6 @@ let unitvector = null;
 let pingList = [];
 let temp = 0;
 
-
 register('renderWorld', () => {
 
     for (let i = 0; i < pingList.length; i++) {
@@ -28,7 +27,7 @@ register("command", (user, text) => {
     if (user != null) {
         range = user;
     }
-    if (text == null) {
+    if (text == null || text == "null") {
         text = "";
     } 
     
@@ -56,11 +55,21 @@ register("command", (user, text) => {
     if (testBlock.getY() < 300 && testBlock.getY() > 0 && range == -1) {
         ChatLib.chat("Block at: " + Math.floor(testBlock.getX()) + ", " + Math.floor(testBlock.getY()) + ", " + Math.floor(testBlock.getZ()) + " is: " + World.getBlockAt(Math.floor(testBlock.getX()), Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())).getType().getName());
         //ChatLib.command("pc " + Player.getName() + " is pinging!");
-        ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ". /CU " + text);
+        if (text != "") {
+            ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ". /CU " + text);
+        } else {
+            ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ". /CU ");
+        }
+        
     } else if (testBlock.getY() < 300 && testBlock.getY() > 0) {
         ChatLib.chat("Block at: " + Math.floor(testBlock.getX()) + ", " + Math.floor(testBlock.getY()) + ", " + Math.floor(testBlock.getZ()) + " is: " + World.getBlockAt(Math.floor(testBlock.getX()), Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())).getType().getName());
         //ChatLib.command("pc " + Player.getName() + " is pinging!");
-        ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ". /CU " + text);
+        if (text != "") {
+            ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ". /CU " + text);
+        } else {
+            ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ". /CU ");
+        }
+        
     } else {
         ChatLib.chat("No block found within maximum height.");
     }
@@ -68,9 +77,9 @@ register("command", (user, text) => {
     for (let i = 0; i < pingList.length; i++) {
         if (pingList[i].getName() == Player.getName()) {
             if (text == null || text == "") {
-                pingList[i] = new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName());
+                //pingList[i] = new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName());
             } else {
-                pingList[i] = new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName(), text);
+                //pingList[i] = new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName(), text);
             }
             temp = 1;
             break;
@@ -78,21 +87,21 @@ register("command", (user, text) => {
     }
     if (temp == 0) {
         if (text == null || text == "") {
-            pingList.push(new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName()));
+            //pingList.push(new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName()));
         } else {
-            pingList.push(new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName(), text));
+            //pingList.push(new Vector(testBlock.getX(),testBlock.getY(),testBlock.getZ(), Player.getName(), text));
         }
     }
    
 }).setName("infos"); // use /infos ingame to get info!! btw i love people called makali
 
-register("chat", (player, x, y, z, text, rank, event) => {
+register("chat", (temp1, rank, player, x, y, z, text, event) => {
     ChatLib.chat("rehehe " + player + " " + x + " " + y + " " + z);
-    if (player != Player.getName()) {
+    if (player == Player.getName()) {
         temp = 0;
         for (let i = 0; i < pingList.length; i++) {
             if (pingList[i].getName() == player) {
-                if (text == null || text == "") {
+                if (text == null || text == "" || text == " ") {
                     pingList[i] = new Vector(x,y,z, player);
                 } else {
                     pingList[i] = new Vector(x,y,z, player, text);
@@ -102,17 +111,16 @@ register("chat", (player, x, y, z, text, rank, event) => {
             }
         }
         if (temp == 0) {
-            if (text == null || text == "") {
+            if (text == null || text == "" || text == " ") {
                 pingList.push(new Vector(x,y,z, player));
             } else {
                 pingList.push(new Vector(x,y,z, player, text));
             }
         }
-        ChatLib.chat(pingList);
-        
     }
     
-}).setCriteria("Party > ${rank} ${player}: x: ${x}, y: ${y}, z: ${z}. /CU ${text}");
+    
+}).setCriteria("${temp1} ${rank} ${player}: x: ${x}, y: ${y}, z: ${z}. /CU ${text}");
 
 
 class Vector {
