@@ -56,11 +56,11 @@ register("command", (user, text) => {
     if (testBlock.getY() < 300 && testBlock.getY() > 0 && range == -1) {
         ChatLib.chat("Block at: " + Math.floor(testBlock.getX()) + ", " + Math.floor(testBlock.getY()) + ", " + Math.floor(testBlock.getZ()) + " is: " + World.getBlockAt(Math.floor(testBlock.getX()), Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())).getType().getName());
         //ChatLib.command("pc " + Player.getName() + " is pinging!");
-        ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ". " + text + "/CU");
+        ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ". /CU " + text);
     } else if (testBlock.getY() < 300 && testBlock.getY() > 0) {
         ChatLib.chat("Block at: " + Math.floor(testBlock.getX()) + ", " + Math.floor(testBlock.getY()) + ", " + Math.floor(testBlock.getZ()) + " is: " + World.getBlockAt(Math.floor(testBlock.getX()), Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())).getType().getName());
         //ChatLib.command("pc " + Player.getName() + " is pinging!");
-        ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ". " + text + "/CU");
+        ChatLib.command("pc " + "x: "+ Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY())+ ", z: "+ Math.floor(testBlock.getZ()) + ". /CU " + text);
     } else {
         ChatLib.chat("No block found within maximum height.");
     }
@@ -108,10 +108,11 @@ register("chat", (player, x, y, z, text, rank, event) => {
                 pingList.push(new Vector(x,y,z, player, text));
             }
         }
+        ChatLib.chat(pingList);
         
     }
     
-}).setCriteria("Party > ${rank} ${player}: x: ${x}, y: ${y}, z: ${z}. ${text}/CU");
+}).setCriteria("Party > ${rank} ${player}: x: ${x}, y: ${y}, z: ${z}. /CU ${text}");
 
 
 class Vector {
