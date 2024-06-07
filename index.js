@@ -1,4 +1,5 @@
 import RenderLib from "../RenderLib/index.js";
+import settings from "./settings";
 
 //all variables are defined here in order to limit the chances of a memory leak occuring
 let testBlock = null;
@@ -49,7 +50,9 @@ register("tick", () => {
         counter += 1;
     }
 });
-
+register("command", (user) => {
+    settings.openGUI();
+}).setName("cu").setAliases("cookieutils"); // use /infos ingame to get info!! btw i love people called makali
 //creates a new ping depending on where the player is looking and posts it in chat
 register("command", (user, text, type) => {
     if (user != null) {
@@ -92,7 +95,7 @@ register("command", (user, text, type) => {
             pingList.push(r);
             setTimeout(() => {
                 pingList.splice(pingList.indexOf(r));
-            }, delete_Waypoint_after);
+            }, settings.delete_waypoint_after);
             temp = 1;
             break;
         }
@@ -102,7 +105,7 @@ register("command", (user, text, type) => {
         pingList.push(r);
         setTimeout(() => {
             pingList.splice(pingList.indexOf(r));
-        }, delete_Waypoint_after);
+        }, settings.delete_waypoint_after);
     }
 }).setName("infos").setAliases("ping"); // use /infos ingame to get info!! btw i love people called makali
 
@@ -118,7 +121,7 @@ register("chat", (temp1, rank, player, x, y, z, text, type, event) => {
                 pingList.push(new Vector(x, y, z, player, text, type));
                 setTimeout(() => {
                     pingList.shift();
-                }, delete_Waypoint_after);
+                }, settings.delete_waypoint_after);
                 temp = 1;
                 break;
             }
@@ -128,7 +131,7 @@ register("chat", (temp1, rank, player, x, y, z, text, type, event) => {
             pingList.push(r);
             setTimeout(() => {
                 pingList.splice(pingList.indexOf(r));
-            }, delete_Waypoint_after);
+            }, settings.delete_waypoint_after);
         }
     }
 }).setCriteria("${temp1} ${rank} ${player}: x: ${x}, y: ${y}, z: ${z}, t: ${text}, t:${type}. Generated using Cookie Utils /cu");
