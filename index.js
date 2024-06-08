@@ -1,5 +1,6 @@
 import RenderLib from "../RenderLib/index.js";
 import settings from "./settings";
+import "./functions.js";
 
 //all variables are defined here in order to limit the chances of a memory leak occuring
 let testBlock = null;
@@ -34,7 +35,7 @@ register('renderWorld', () => {
             Tessellator.drawString(pingList[i].getText(), Math.floor(pingList[i].getX()) + 0.5, Math.floor(pingList[i].getY()) + 1, Math.floor(pingList[i].getZ()) + 0.5);
         }
     }
-    
+
 });
 
 //called every tick
@@ -90,7 +91,7 @@ register("command", (user, text, type) => {
     temp = 0;
     for (let i = 0; i < pingList.length; i++) {
         if (pingList[i].getName() == Player.getName()) {
-            pingList.splice(i,1); 
+            pingList.splice(i, 1);
             let r = new Vector(testBlock.getX(), testBlock.getY(), testBlock.getZ(), Player.getName(), text, type);
             pingList.push(r);
             setTimeout(() => {
@@ -111,17 +112,17 @@ register("command", (user, text, type) => {
 
 //fetches waypoints from other users
 register("chat", (temp1, rank, player, x, y, z, text, type, event) => {
-    cancel(event);
+    //cancel(event); 
     if (player != Player.getName()) {
         ChatLib.chat("Ping fetched from " + player);
         temp = 0;
         for (let i = 0; i < pingList.length; i++) {
             if (pingList[i].getName() == player) {
-                pingList.splice(i,1); 
+                pingList.splice(i, 1);
                 pingList.push(new Vector(x, y, z, player, text, type));
-                setTimeout(() => {
-                    pingList.shift();
-                }, settings.delete_waypoint_after);
+
+                functions.deleteWaypoint(pingList.indexOf(r), delete_waypoint_after);
+
                 temp = 1;
                 break;
             }
@@ -129,9 +130,9 @@ register("chat", (temp1, rank, player, x, y, z, text, type, event) => {
         if (temp == 0) {
             let r = new Vector(x, y, z, player, text, type)
             pingList.push(r);
-            setTimeout(() => {
-                pingList.splice(pingList.indexOf(r));
-            }, settings.delete_waypoint_after);
+
+            functions.deleteWaypoint(pingList.indexOf(r), delete_waypoint_after);
+          
         }
     }
 }).setCriteria("${temp1} ${rank} ${player}: x: ${x}, y: ${y}, z: ${z}, t: ${text}, t:${type}. Generated using Cookie Utils /cu");
@@ -199,7 +200,7 @@ class Vector {
 }
 
 /*
-References 
+References
 tablist = TabList?.getNames()?.map(name => name?.removeFormatting());
 scoreboard = Scoreboard.getLines(true)?.map(line => line?.getName()?.removeFormatting()?.replace(/[^\u0000-\u007F]/g, ""));
 */
