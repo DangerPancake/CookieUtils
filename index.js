@@ -12,7 +12,6 @@ let playerPos = null;
 let unitvector = null;
 let pingList = [];
 let temp = 0;
-let delete_Waypoint_after = 10000; //default set to 1000ms HA I CHANGED IT
 let lastArea = null;
 let counter = 0;
 
@@ -42,7 +41,7 @@ register('renderWorld', () => {
 register("tick", () => {
     if (pingList.length != 0) {
         if (counter > 2) {
-            if (TabList?.getNames()?.map(name => name?.removeFormatting())[41] != lastArea) {
+            if (TabList?.getNames()?.map(name => name?.removeFormatting())[41] != lastArea && lastArea != null) {
                 pingList = [];
             }
             counter = 0;
@@ -51,16 +50,36 @@ register("tick", () => {
         counter += 1;
     }
 });
+
 register("command", (user) => {
     settings.openGUI();
-}).setName("cu").setAliases("cookieutils"); // use /infos ingame to get info!! btw i love people called makali
+}).setName("cu").setAliases("cookieutils"); 
+
 //creates a new ping depending on where the player is looking and posts it in chat
 register("command", (user, text, type) => {
     if (user != null) {
         range = user;
+    } else {
+        if (settings.pingRange == 0) {
+            range = -1;
+        } else {
+            range = settings.pingRange;
+        }
     }
+    
     if (text == null) {
         text = "null";
+    }
+
+    if (type == null) {
+        switch (settings.pingShape) {
+            case 1:
+                type = "INNERBOX";
+            case 2:
+                type = "BARITONEBOX";
+            case 0:
+                type = "BOX";
+        }
     }
 
     playerPos = new Vector(Player.getX(), Player.getY() + 1.62, Player.getZ());
@@ -68,9 +87,7 @@ register("command", (user, text, type) => {
     pitch = Player.getPitch() * Math.PI / 180;
     unitvector = new Vector(-Math.sin(yaw) * Math.cos(pitch), -Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch));
     testBlock = new Vector(playerPos.getX(), playerPos.getY(), playerPos.getZ());
-    drawtype = type ?? "BOX";
-    drawtype = "t:" + drawtype;
-
+    
     //creates a ray
     while (true) {
         distance = Math.sqrt(Math.pow(playerPos.x - testBlock.getX(), 2) + Math.pow(playerPos.y - testBlock.getY(), 2) + Math.pow(playerPos.z - testBlock.getZ(), 2))
@@ -79,63 +96,51 @@ register("command", (user, text, type) => {
             break;
         }
     }
+    
     //posting in chat
-    if (testBlock.getY() < 300 && testBlock.getY() > 0 && range == -1) {
+    if (testBlock.getY() < 300 && testBlock.getY() > 0) {
         ChatLib.chat("Block at: " + Math.floor(testBlock.getX()) + ", " + Math.floor(testBlock.getY()) + ", " + Math.floor(testBlock.getZ()) + " is: " + World.getBlockAt(Math.floor(testBlock.getX()), Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())).getType().getName());
-        ChatLib.command("pc " + "x: " + Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY()) + ", z: " + Math.floor(testBlock.getZ()) + ", t: " + text + ", t:" + drawtype + ". Generated using Cookie Utils /cu");
-        //ChatLib.command("tellraw Quektos \"Party > [MVP] Quektos: " + "x: " + Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY()) + ", z: " + Math.floor(testBlock.getZ()) + ", t: " + text + ", t:" + drawtype + ". /CU \"");
-        //okay this is broken af lol your tellraw
+        ChatLib.command("tell sweatykeycaps " + "x: " + Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY()) + ", z: " + Math.floor(testBlock.getZ()) + ", t: " + text + ", t:" + type + ". Generated using Cookie Utils /cu");
     } else {
         ChatLib.chat("No block found within maximum height.");
     }
+
+}).setName("infos").setAliases("ping"); // use /infos ingame to get info!! btw i love people called makali
+
+//fetches waypoints from other users
+register("chat", (player, x, y, z, text, type, event) => {
+    ChatLib.chat("Ping fetched from " + player);
+    if (/to(?:\s+\w+)+:/i.test(player)) {
+        player = Player.getName();
+    } else {
+        player = player.split(':')[0].trim().split(' ').pop();
+    }
     temp = 0;
     for (let i = 0; i < pingList.length; i++) {
-        if (pingList[i].getName() == Player.getName()) {
+        if (pingList[i].getName() == player) {
             pingList.splice(i, 1);
-            let r = new Vector(testBlock.getX(), testBlock.getY(), testBlock.getZ(), Player.getName(), text, type);
-            pingList.push(r);
-            setTimeout(() => {
-                pingList.splice(pingList.indexOf(r));
-            }, settings.delete_waypoint_after);
+            pingList.push(new Vector(x, y, z, player, text, type));
+
+            if (settings.delete_waypoint_after != 0) {
+                setTimeout(() => {
+                    pingList.splice(pingList.indexOf(r));
+                }, settings.delete_waypoint_after);
+            }
             temp = 1;
             break;
         }
     }
     if (temp == 0) {
-        let r = new Vector(testBlock.getX(), testBlock.getY(), testBlock.getZ(), Player.getName(), text, type)
+        let r = new Vector(x, y, z, player, text, type)
         pingList.push(r);
-        setTimeout(() => {
-            pingList.splice(pingList.indexOf(r));
-        }, settings.delete_waypoint_after);
-    }
-}).setName("infos").setAliases("ping"); // use /infos ingame to get info!! btw i love people called makali
-
-//fetches waypoints from other users
-register("chat", (temp1, rank, player, x, y, z, text, type, event) => {
-    //cancel(event); 
-    if (player != Player.getName()) {
-        ChatLib.chat("Ping fetched from " + player);
-        temp = 0;
-        for (let i = 0; i < pingList.length; i++) {
-            if (pingList[i].getName() == player) {
-                pingList.splice(i, 1);
-                pingList.push(new Vector(x, y, z, player, text, type));
-
-                functions.deleteWaypoint(pingList.indexOf(r), delete_waypoint_after);
-
-                temp = 1;
-                break;
-            }
-        }
-        if (temp == 0) {
-            let r = new Vector(x, y, z, player, text, type)
-            pingList.push(r);
-
-            functions.deleteWaypoint(pingList.indexOf(r), delete_waypoint_after);
-          
+        if (settings.delete_waypoint_after != 0) {
+            setTimeout(() => {
+                pingList.splice(pingList.indexOf(r));
+            }, settings.delete_waypoint_after);
         }
     }
-}).setCriteria("${temp1} ${rank} ${player}: x: ${x}, y: ${y}, z: ${z}, t: ${text}, t:${type}. Generated using Cookie Utils /cu");
+}).setCriteria("${player}: x: ${x}, y: ${y}, z: ${z}, t: ${text}, t:${type}. Generated using Cookie Utils /cu").setContains();
+
 
 //vector class
 class Vector {
@@ -198,7 +203,6 @@ class Vector {
         this.z += vector.getZ()
     }
 }
-
 /*
 References
 tablist = TabList?.getNames()?.map(name => name?.removeFormatting());

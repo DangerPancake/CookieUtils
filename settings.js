@@ -56,40 +56,49 @@ class Settings {
     textInput = '';
 
     @TextProperty({
-        name: 'password',
-        description: 'Example of text input that uses protected',
+        name: 'Default Ping Text',
+        description: 'What your ping defaults to instead of your name',
         category: 'General',
         subcategory: 'Dungeons',
-        protected: true,
     })
     password = '';
 
     @ColorProperty({
-        name: 'Color Picker',
-        description: 'Pick a color! (hopefully...)',
+        name: 'Ping color',
+        description: 'Pick a color!',
         category: 'General',
-        subcategory: 'Dungeons',
+        subcategory: 'Ping',
     })
-    myColor = Color.BLUE;
+    pingColor = Color.BLUE;
 
     @SelectorProperty({
-        name: 'Selector',
+        name: 'Ping shape',
         description: 'Select an option',
         category: 'General',
         subcategory: 'Ping',
-        options: ['opt1', 'opty2', 'third option'],
+        options: ['box', 'solid box', 'funni'],
     })
-    myOptions = 0; // Stores index of option
+    pingShape = 0; // Stores index of option
 
     @SliderProperty({
         name: 'Delete ping waypoints after:',
-        description: 'Select a value',
+        description: 'Select a value (0 is forever)',
         category: 'General',
         subcategory: 'Ping',
         min: 0,
         max: 10000
     })
     delete_waypoint_after = 0;
+
+    @SliderProperty({
+        name: 'Default ping range',
+        description: 'Select a value (0 is infinite)',
+        category: 'General',
+        subcategory: 'Ping',
+        min: 0,
+        max: 1000
+    })
+    pingRange = 0;
 
 
     @SwitchProperty({

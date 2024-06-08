@@ -2,9 +2,12 @@
 [general]
 
 	[general.ping]
-		"delete_ping_waypoints_after:" = 10000
+		ping_shape = 0
+		default_ping_range = 0
+		"delete_ping_waypoints_after:" = 0
 		selector = 0
 		percent_slider = 0.0
+		ping_color = "255,0,0,255"
 
 	[general.dungeons]
 		password = ""
@@ -13,6 +16,7 @@
 		"delete_ping_waypoints_after:" = 1000.0
 		"do_action!!!" = false
 		text = ""
+		default_ping_text = ""
 
 	[general.eeeeee]
 		selector = 0
