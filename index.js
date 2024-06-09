@@ -1,8 +1,10 @@
 import RenderLib from "../RenderLib/index.js";
 import settings from "./settings";
 import "./functions.js";
+import { Vector, deleteWaypoint } from "./functions.js";
 
 //all variables are defined here in order to limit the chances of a memory leak occuring
+////////////// we should make a seperate file to store all the variables or add them to the option.js file?
 let testBlock = null;
 let range = -1;
 let distance = 0;
@@ -15,23 +17,34 @@ let temp = 0;
 let lastArea = null;
 let counter = 0;
 
+// Waypoint vars
+let [width, height] = [1, 1];
+let [red, green, blue] = [0, 0, 1];
+let [alpha, phase] = [1, true];
+
+
 //renders pings
 register('renderWorld', () => {
     for (let i = 0; i < pingList.length; i++) {
+        let wp = pingList[i];
+        let [wptype, wptext] = [wp.getType(), wp.getText()];
+        let [wpx, wpy, wpz] = [Math.floor(wp.getX()), Math.floor(wp.getY()), Math.floor(wp.getZ())];
 
-        // TYPE DETECTION: CURRENTLY ONLY WORKS WITH "BOX", "INNERBOX" AND ALSO "BARITONEBOX" I WILL WORK ON IT TOMORROW IM TIRED - ALSO THE WAYPOINT DELETION TIME IS STILL SET TO 1SECOND I WILL FIX TOMORROW!!! //
-        if (pingList[i].getType() == null || pingList[i].getType() == "BOX") {
-            RenderLib.drawEspBox(Math.floor(pingList[i].getX()) + 0.5, Math.floor(pingList[i].getY()), Math.floor(pingList[i].getZ()) + 0.5, 1, 1, 0, 0, 1, 1, true);
-        } else if (pingList[i].getType() == "INNERBOX") {
-            RenderLib.drawInnerEspBox(Math.floor(pingList[i].getX()) + 0.5, Math.floor(pingList[i].getY()), Math.floor(pingList[i].getZ()) + 0.5, 1, 1, 0, 0, 1, 1, true);
-        } else if (pingList[i].getType() == "BARITONEBOX") {
-            RenderLib.drawBaritoneEspBox(Math.floor(pingList[i].getX()) + 0.5, Math.floor(pingList[i].getY()), Math.floor(pingList[i].getZ()) + 0.5, 1, 1, 0, 0, 1, 1, true);
+
+        // draw Waypoint
+        if (wptype == null || wptype == "BOX") {
+            RenderLib.drawEspBox(wpx + 0.5, wpy, wpz + 0.5, width, height, red, green, blue, alpha, phase);
+        } else if (wptype == "INNERBOX") {
+            RenderLib.drawInnerEspBox(wpx + 0.5, wpy, wpz + 0.5, width, height, red, green, blue, alpha, phase);
+        } else if (wptype == "BARITONEBOX") {
+            RenderLib.drawBaritoneEspBox(wpx + 0.5, wpy, wpz + 0.5, width, height, red, green, blue, alpha, phase);
         }
-        // RenderLib.drawInnerEspBox(Math.floor(pingList[i].getX()) + 0.5, Math.floor(pingList[i].getY()), Math.floor(pingList[i].getZ()) + 0.5, 1, 1, 0, 0, 1, 1, true);
-        if (pingList[i].getText() == null || pingList[i].getText() == "null") {
-            Tessellator.drawString(pingList[i].getName(), Math.floor(pingList[i].getX()) + 0.5, Math.floor(pingList[i].getY()) + 1, Math.floor(pingList[i].getZ()) + 0.5);
+
+        // draw Waypoint Text
+        if (wptext == null || wptext == "null") {
+            Tessellator.drawString(wp.getName(), wpx + 0.5, wpy + 1, wpz + 0.5);
         } else {
-            Tessellator.drawString(pingList[i].getText(), Math.floor(pingList[i].getX()) + 0.5, Math.floor(pingList[i].getY()) + 1, Math.floor(pingList[i].getZ()) + 0.5);
+            Tessellator.drawString(wptext, wpx + 0.5, wpy + 1, wpz + 0.5);
         }
     }
 
@@ -53,7 +66,7 @@ register("tick", () => {
 
 register("command", (user) => {
     settings.openGUI();
-}).setName("cu").setAliases("cookieutils"); 
+}).setName("cu").setAliases("cookieutils");
 
 //creates a new ping depending on where the player is looking and posts it in chat
 register("command", (user, text, type) => {
@@ -66,7 +79,7 @@ register("command", (user, text, type) => {
             range = settings.pingRange;
         }
     }
-    
+
     if (text == null) {
         text = "null";
     }
@@ -87,7 +100,7 @@ register("command", (user, text, type) => {
     pitch = Player.getPitch() * Math.PI / 180;
     unitvector = new Vector(-Math.sin(yaw) * Math.cos(pitch), -Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch));
     testBlock = new Vector(playerPos.getX(), playerPos.getY(), playerPos.getZ());
-    
+
     //creates a ray
     while (true) {
         distance = Math.sqrt(Math.pow(playerPos.x - testBlock.getX(), 2) + Math.pow(playerPos.y - testBlock.getY(), 2) + Math.pow(playerPos.z - testBlock.getZ(), 2))
@@ -100,7 +113,7 @@ register("command", (user, text, type) => {
     //posting in chat
     if (testBlock.getY() < 300 && testBlock.getY() > 0) {
         ChatLib.chat("Block at: " + Math.floor(testBlock.getX()) + ", " + Math.floor(testBlock.getY()) + ", " + Math.floor(testBlock.getZ()) + " is: " + World.getBlockAt(Math.floor(testBlock.getX()), Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())).getType().getName());
-        ChatLib.command("tell sweatykeycaps " + "x: " + Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY()) + ", z: " + Math.floor(testBlock.getZ()) + ", t: " + text + ", t:" + type + ". Generated using Cookie Utils /cu");
+        ChatLib.command("pc " + "x: " + Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY()) + ", z: " + Math.floor(testBlock.getZ()) + ", t: " + text + ", t:" + type + ". Generated using Cookie Utils /cu");
     } else {
         ChatLib.chat("No block found within maximum height.");
     }
@@ -142,67 +155,7 @@ register("chat", (player, x, y, z, text, type, event) => {
 }).setCriteria("${player}: x: ${x}, y: ${y}, z: ${z}, t: ${text}, t:${type}. Generated using Cookie Utils /cu").setContains();
 
 
-//vector class
-class Vector {
-    constructor(x, y, z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-    constructor(x, y, z, name) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.name = name;
-    }
 
-    constructor(x, y, z, name, text) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.name = name;
-        this.text = text;
-    }
-
-    constructor(x, y, z, name, text, type) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.name = name;
-        this.text = text;
-        this.type = type;
-    }
-
-    getX() {
-        return this.x;
-    }
-
-    getName() {
-        return this.name;
-    }
-
-    getY() {
-        return this.y;
-    }
-
-    getZ() {
-        return this.z;
-    }
-
-    getText() {
-        return this.text;
-    }
-
-    getType() {
-        return this.type;
-    }
-
-    add(vector) {
-        this.x += vector.getX()
-        this.y += vector.getY()
-        this.z += vector.getZ()
-    }
-}
 /*
 References
 tablist = TabList?.getNames()?.map(name => name?.removeFormatting());
