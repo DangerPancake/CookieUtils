@@ -74,4 +74,4 @@ class Vector {
     }
 }
 
-export { Vector, drawWaypoint, deleteWaypoint };
+export { Vector, deleteWaypoint };

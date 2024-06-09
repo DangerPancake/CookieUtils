@@ -44,32 +44,15 @@ import {
     }
 })
 class Settings {
-    
-    @TextProperty({
-        name: 'e',
-        description: 'amount in ms - set to 0 to never delete it',
-        category: 'General',
-        subcategory: 'Dungeons',
-        placeholder: 'poopy',
-        triggerActionOnInitialization: false,
-    })
-    textInput = '';
 
     @TextProperty({
         name: 'Default Ping Text',
         description: 'What your ping defaults to instead of your name',
         category: 'General',
-        subcategory: 'Dungeons',
-    })
-    password = '';
-
-    @ColorProperty({
-        name: 'Ping color',
-        description: 'Pick a color!',
-        category: 'General',
         subcategory: 'Ping',
     })
-    pingColor = Color.BLUE;
+    pingText = '';
+
 
     @SelectorProperty({
         name: 'Ping shape',
@@ -99,32 +82,27 @@ class Settings {
         max: 1000
     })
     pingRange = 0;
-
-
-    @SwitchProperty({
-        name: 'Do action!!!',
-        description: 'toggle the checkbox in Not general! tab!',
-        category: 'General',
-        subcategory: 'Dungeons',
-        placeholder: 'Activate',
-    })
-    switch = false;
     
     @CheckboxProperty({
-        name: 'Checkbox',
-        description: 'Check this box',
-        category: 'Not general!',
+        name: 'Limit to one ping per player',
+        description: 'Not recommended but certainly is an option',
+        category: 'General',
+        subcategory: 'Ping',
     })
-    myCheckbox = false;
+    onePing = false;
+
+    @CheckboxProperty({
+        name: 'Limit to one ping of a text',
+        description: 'ex: only one LB ping can be shown',
+        category: 'General',
+        subcategory: 'Ping',
+    })
+    onePingText = true;
+
     
 
     constructor() {
         this.initialize(this);
-        this.registerListener('e', newText => {
-            console.log(`Text changed to ${newText}`);
-        });
-
-        this.addDependency("Checkbox", "Do action!!!")
         this.setCategoryDescription('General', 'CookieUtils Settings');
         this.setSubcategoryDescription('General', 'Dungeons', 'Shows off some nifty property examples.');
     }
