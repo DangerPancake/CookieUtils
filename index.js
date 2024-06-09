@@ -1,7 +1,7 @@
 import RenderLib from "../RenderLib/index.js";
 import settings from "./settings";
 import "./functions.js";
-import { Vector } from "./functions.js";
+import { Vector, pseudoString, printAMessage } from "./functions.js";
 
 //all variables are defined here in order to limit the chances of a memory leak occuring
 let testBlock = null;
@@ -27,6 +27,7 @@ register('renderWorld', () => {
         let wp = pingList[i];
         let [wptype, wptext] = [wp.getType(), wp.getText()];
         let [wpx, wpy, wpz] = [Math.floor(wp.getX()), Math.floor(wp.getY()), Math.floor(wp.getZ())];
+        [red, green, blue, alpha] = [settings.red, settings.green, settings.blue, 1];
         // draw Waypoint
         if (wptype == null || wptype == "BOX") {
             RenderLib.drawEspBox(wpx + 0.5, wpy, wpz + 0.5, width, height, red, green, blue, alpha, phase);
@@ -48,21 +49,19 @@ register('renderWorld', () => {
 });
 
 register("chat", (dragon, event) => {
-
-    ChatLib.chat("dragon is here: " + dragon);
-    if (dragon == "APEX") {
-        ChatLib.command("pc x: 26, y: 18, z: 92 t: GREEN, t:BOX. Generated using Cookie Utils / cu");
-    } else if (dragon == "ICE") {
-        ChatLib.command("pc x: 82, y: 18, z: 96 t: BLUE, t:BOX. Generated using Cookie Utils /cu");
-    } else if (dragon == "FLAME") {
-        ChatLib.command("pc x: 83, y: 18, z: 57 t: ORANGE, t:BOX. Generated using Cookie Utils /cu");
-    } else if (dragon == "SOUL") {
-        ChatLib.command("pc x: 56, y: 20, z: 124 t: SOUL, t:BOX. Generated using Cookie Utils /cu");
-    } else if (dragon == "POWER") {
-        ChatLib.command("pc x: 27, y: 18, z: 56 t: RED, t:BOX. Generated using Cookie Utils /cu");
+    if (settings.m7Drags) {
+        if (dragon == "APEX") {
+            printAMessage("pc x: 26, y: 18, z: 92 t: GREEN, t:BOX. Generated using Cookie Utils / cu", settings.addText);
+        } else if (dragon == "ICE") {
+            printAMessage("pc x: 82, y: 18, z: 96 t: BLUE, t:BOX. Generated using Cookie Utils /cu", settings.addText);
+        } else if (dragon == "FLAME") {
+            printAMessage("pc x: 83, y: 18, z: 57 t: ORANGE, t:BOX. Generated using Cookie Utils /cu", settings.addText);
+        } else if (dragon == "SOUL") {
+            printAMessage("pc x: 56, y: 20, z: 124 t: SOUL, t:BOX. Generated using Cookie Utils /cu", settings.addText);
+        } else if (dragon == "POWER") {
+            printAMessage("pc x: 27, y: 18, z: 56 t: RED, t:BOX. Generated using Cookie Utils /cu", settings.addText);
+        }
     }
-
-
 }).setCriteria("The ${dragon} dragon is spawning!").setContains();
 
 //called every tick
@@ -138,7 +137,7 @@ register("command", (user, text, type) => {
     //posting in chat
     if (testBlock.getY() < 300 && testBlock.getY() > 0) {
         ChatLib.chat("Block at: " + Math.floor(testBlock.getX()) + ", " + Math.floor(testBlock.getY()) + ", " + Math.floor(testBlock.getZ()) + " is: " + World.getBlockAt(Math.floor(testBlock.getX()), Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())).getType().getName());
-        ChatLib.command("pc " + "x: " + Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY()) + ", z: " + Math.floor(testBlock.getZ()) + " t: " + text + ", t:" + type + ". Generated using Cookie Utils /cu");
+        printAMessage("tell NotFishion " + "x: " + Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY()) + ", z: " + Math.floor(testBlock.getZ()) + " t: " + text + ", t:" + type + ". Generated using Cookie Utils /cu", settings.addText);
     } else {
         ChatLib.chat("No block found within maximum height.");
     }

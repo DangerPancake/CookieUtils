@@ -63,6 +63,44 @@ class Settings {
     })
     pingShape = 0; // Stores index of option
 
+    @SwitchProperty({
+        name: 'Change Ping Color',
+        description: 'Change the ping color',
+        category: 'General',
+        subcategory: 'Ping',
+    })
+    colorable = false;
+
+    @SliderProperty({
+        name: 'Red',
+        description: 'Select a value!',
+        category: 'General',
+        subcategory: 'Ping',
+        min: 0,
+        max: 255
+    })
+    red = 0;
+
+    @SliderProperty({
+        name: 'Green',
+        description: 'Select a value!',
+        category: 'General',
+        subcategory: 'Ping',
+        min: 0,
+        max: 255
+    })
+    green = 0;
+
+    @SliderProperty({
+        name: 'Blue',
+        description: 'Select a value!',
+        category: 'General',
+        subcategory: 'Ping',
+        min: 0,
+        max: 255
+    })
+    blue = 1;
+
     @SliderProperty({
         name: 'Delete ping waypoints after:',
         description: 'Select a value (0 is forever)',
@@ -83,7 +121,7 @@ class Settings {
     })
     pingRange = 0;
     
-    @CheckboxProperty({
+    @SwitchProperty({
         name: 'Limit to one ping per player',
         description: 'Not recommended but certainly is an option',
         category: 'General',
@@ -91,7 +129,7 @@ class Settings {
     })
     onePing = false;
 
-    @CheckboxProperty({
+    @SwitchProperty({
         name: 'Limit to one ping of a text',
         description: 'ex: only one LB ping can be shown',
         category: 'General',
@@ -99,12 +137,29 @@ class Settings {
     })
     onePingText = true;
 
-    
+    @SwitchProperty({
+        name: 'Add Random String',
+        description: 'Adds a random string at the end of ping messages to prevent blocking',
+        category: 'General',
+        subcategory: 'Ping',
+    })
+    addText = false;
+
+    @SwitchProperty({
+        name: 'M7 Dragons Autoping',
+        description: 'Automatically sends a ping for where to shoot Last Breath during M7 P5',
+        category: 'General',
+        subcategory: 'Dungeons',
+    })
+    m7Drags = false;
 
     constructor() {
         this.initialize(this);
+        this.addDependency("Red", "Change Ping Color")
+        this.addDependency("Green", "Change Ping Color")
+        this.addDependency("Blue", "Change Ping Color")
         this.setCategoryDescription('General', 'CookieUtils Settings');
-        this.setSubcategoryDescription('General', 'Dungeons', 'Shows off some nifty property examples.');
+        this.setSubcategoryDescription('General', 'Dungeons', 'Dungeons Features');
     }
 }
 

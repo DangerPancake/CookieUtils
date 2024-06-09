@@ -65,4 +65,23 @@ class Vector {
     }
 }
 
-export { Vector };
+function pseudoString(length) {
+    let string = "";
+    for (let i = 0; i < length - 1; i++) {
+        let random = Math.floor(Math.random() * 94); // Adjusted to fit the printable ASCII range
+        string += String.fromCharCode(33 + random); // 33-126 are printable characters in ASCII
+    }
+    return string;
+}
+
+function printAMessage(message, addString) {
+    if (addString) {
+        let r = message + " " + pseudoString(11)
+        ChatLib.command(r);
+        //ChatLib.chat(r)
+    } else {
+        ChatLib.command(message);
+    }
+}
+
+export { Vector, pseudoString, printAMessage};

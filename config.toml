@@ -4,13 +4,19 @@
 	[general.ping]
 		ping_shape = 1
 		limit_to_one_ping_of_a_text = true
+		green = 196
 		default_ping_range = 0
+		add_random_string = true
+		change_ping_color = true
+		ping_color = "255,78,134,139"
+		red = 0
 		limit_to_one_ping_per_player = false
+		blue = 0
 		"delete_ping_waypoints_after:" = 0
+		alpha = 2
 		selector = 0
 		percent_slider = 0.0
 		default_ping_text = ""
-		ping_color = "255,78,134,139"
 
 	[general.dungeons]
 		password = ""
@@ -20,6 +26,7 @@
 		"do_action!!!" = false
 		text = ""
 		default_ping_text = ""
+		m7_dragons_autoping = true
 
 	[general.eeeeee]
 		selector = 0
