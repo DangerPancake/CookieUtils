@@ -34,6 +34,8 @@ register('renderWorld', () => {
             RenderLib.drawInnerEspBox(wpx + 0.5, wpy, wpz + 0.5, width, height, red, green, blue, alpha, phase);
         } else if (wptype == "BARITONEBOX") {
             RenderLib.drawBaritoneEspBox(wpx, wpy, wpz, width, height, red, green, blue, alpha, phase);
+        } else {
+            RenderLib.drawEspBox(wpx + 0.5, wpy, wpz + 0.5, width, height, red, green, blue, alpha, phase);
         }
 
         // draw Waypoint Text
@@ -44,6 +46,24 @@ register('renderWorld', () => {
         }
     }
 });
+
+register("chat", (dragon, event) => {
+
+    ChatLib.chat("dragon is here: " + dragon);
+    if (dragon == "APEX") {
+        ChatLib.command("pc x: 26, y: 18, z: 92 t: GREEN, t:BOX. Generated using Cookie Utils / cu");
+    } else if (dragon == "ICE") {
+        ChatLib.command("pc x: 82, y: 18, z: 96 t: BLUE, t:BOX. Generated using Cookie Utils /cu");
+    } else if (dragon == "FLAME") {
+        ChatLib.command("pc x: 83, y: 18, z: 57 t: ORANGE, t:BOX. Generated using Cookie Utils /cu");
+    } else if (dragon == "SOUL") {
+        ChatLib.command("pc x: 56, y: 20, z: 124 t: SOUL, t:BOX. Generated using Cookie Utils /cu");
+    } else if (dragon == "POWER") {
+        ChatLib.command("pc x: 27, y: 18, z: 56 t: RED, t:BOX. Generated using Cookie Utils /cu");
+    }
+
+
+}).setCriteria("The ${dragon} dragon is spawning!").setContains();
 
 //called every tick
 register("tick", () => {
