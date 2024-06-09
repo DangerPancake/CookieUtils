@@ -60,12 +60,14 @@ register("tick", () => {
 });
 
 register("command", (user) => {
-    settings.openGUI();
+    if (user == null || user == "" || user == "settings") {
+        settings.openGUI();
+    }
+    if (user == "cp" || user == "clearping") {
+        pingList = [];
+    }
 }).setName("cu").setAliases("cookieutils"); 
 
-register("command", (user) => {
-    pingList = [];
-}).setName("clearpings").setAliases("cp"); 
 
 //creates a new ping depending on where the player is looking and posts it in chat
 register("command", (user, text, type) => {
