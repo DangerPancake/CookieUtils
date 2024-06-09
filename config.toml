@@ -2,7 +2,7 @@
 [general]
 
 	[general.ping]
-		ping_shape = 0
+		ping_shape = 1
 		limit_to_one_ping_of_a_text = true
 		default_ping_range = 0
 		limit_to_one_ping_per_player = false

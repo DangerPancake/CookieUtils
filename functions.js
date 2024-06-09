@@ -1,13 +1,4 @@
 
-// used to delete Waypoints after a set amount of time
-function deleteWaypoint(waypoint, ms = 1000) {
-    setTimeout(() => {
-        pingList.splice(waypoint);
-    }, settings.waypoint);
-}
-
-
-
 // move the vector class here too later on to make index.js look cleaner (i dont wanna break anything for now) (update: i just tried but i would have to add the namespace
 // in front of every vector if i understand this correctly? this would mean everytime you do new vector() you would have to new functions.vector() right?
 // UPDATE: I MOVED IT WITHOUT BREAKING ANYTHING YAAAAAAAAAYYYYYY
@@ -74,4 +65,4 @@ class Vector {
     }
 }
 
-export { Vector, deleteWaypoint };
+export { Vector };

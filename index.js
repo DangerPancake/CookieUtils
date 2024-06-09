@@ -1,7 +1,7 @@
 import RenderLib from "../RenderLib/index.js";
 import settings from "./settings";
 import "./functions.js";
-import { Vector, deleteWaypoint } from "./functions.js";
+import { Vector } from "./functions.js";
 
 //all variables are defined here in order to limit the chances of a memory leak occuring
 let testBlock = null;
@@ -143,7 +143,7 @@ register("chat", (player, x, y, z, text, type, event) => {
             }
             temp = 1;
             break;
-        } else if (pingList[i].getText() == text && settings.onePingText) {
+        } else if (pingList[i].getText() == text && settings.onePingText && pingList[i].getName() == player) {
             pingList.splice(i, 1);
             pingList.push(new Vector(x, y, z, player, text, type));
 
