@@ -2,7 +2,6 @@ import RenderLib from "../RenderLib/index.js";
 import settings from "./settings";
 import "./functions.js";
 import { Vector, deleteWaypoint } from "./functions.js";
-import 
 
 //all variables are defined here in order to limit the chances of a memory leak occuring
 ////////////// we should make a seperate file to store all the variables or add them to the option.js file?
