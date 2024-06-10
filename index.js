@@ -1,7 +1,7 @@
 import RenderLib from "../RenderLib/index.js";
 import settings from "./settings";
 import "./functions.js";
-import { Vector, pseudoString, printAMessage } from "./functions.js";
+import { Vector, pseudoString, printAMessage, playSound } from "./functions.js";
 
 //all variables are defined here in order to limit the chances of a memory leak occuring
 let testBlock = null;
@@ -20,6 +20,8 @@ let counter = 0;
 let [width, height] = [1, 1];
 let [red, green, blue, alpha] = [0, 0, 1, 1];
 let phase = true;
+
+const MEME = new Sound({source: "meme.ogg"});
 
 //renders pings
 register('renderWorld', () => {
@@ -137,7 +139,7 @@ register("command", (user, text, type) => {
     //posting in chat
     if (testBlock.getY() < 300 && testBlock.getY() > 0) {
         ChatLib.chat("Block at: " + Math.floor(testBlock.getX()) + ", " + Math.floor(testBlock.getY()) + ", " + Math.floor(testBlock.getZ()) + " is: " + World.getBlockAt(Math.floor(testBlock.getX()), Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())).getType().getName());
-        printAMessage("tell NotFishion " + "x: " + Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY()) + ", z: " + Math.floor(testBlock.getZ()) + " t: " + text + ", t:" + type + ". Generated using Cookie Utils /cu", settings.addText);
+        printAMessage("pc " + "x: " + Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY()) + ", z: " + Math.floor(testBlock.getZ()) + " t: " + text + ", t:" + type + ". Generated using Cookie Utils /cu", settings.addText);
     } else {
         ChatLib.chat("No block found within maximum height.");
     }
@@ -152,43 +154,53 @@ register("chat", (player, x, y, z, text, type, event) => {
         player = player.split(':')[0].trim().split(' ').pop();
     }
     temp = 0;
-    for (let i = 0; i < pingList.length; i++) {
-        if (pingList[i].getName() == player && settings.onePing) {
-            pingList.splice(i, 1);
-            pingList.push(new Vector(x, y, z, player, text, type));
+    if (settings.acceptPings || player == Player.getName()) {
+        for (let i = 0; i < pingList.length; i++) {
+            if (pingList[i].getName() == player && settings.onePing) {
+                pingList.splice(i, 1);
+                pingList.push(new Vector(x, y, z, player, text, type));
 
+                if (settings.delete_waypoint_after != 0) {
+                    setTimeout(() => {
+                        pingList.splice(pingList.indexOf(r));
+                    }, settings.delete_waypoint_after);
+                }
+                temp = 1;
+                break;
+            } else if (pingList[i].getText() == text && settings.onePingText && pingList[i].getName() == player) {
+                pingList.splice(i, 1);
+                pingList.push(new Vector(x, y, z, player, text, type));
+
+                if (settings.delete_waypoint_after != 0) {
+                    setTimeout(() => {
+                        pingList.splice(pingList.indexOf(r));
+                    }, settings.delete_waypoint_after);
+                }
+                temp = 1;
+                break;
+            }
+        }
+        if (temp == 0) {
+            let r = new Vector(x, y, z, player, text, type)
+            pingList.push(r);
             if (settings.delete_waypoint_after != 0) {
                 setTimeout(() => {
                     pingList.splice(pingList.indexOf(r));
                 }, settings.delete_waypoint_after);
             }
-            temp = 1;
-            break;
-        } else if (pingList[i].getText() == text && settings.onePingText && pingList[i].getName() == player) {
-            pingList.splice(i, 1);
-            pingList.push(new Vector(x, y, z, player, text, type));
-
-            if (settings.delete_waypoint_after != 0) {
-                setTimeout(() => {
-                    pingList.splice(pingList.indexOf(r));
-                }, settings.delete_waypoint_after);
-            }
-            temp = 1;
-            break;
         }
+        ChatLib.chat("Ping fetched from " + player);
+        playSound(MEME, 1);
     }
-    if (temp == 0) {
-        let r = new Vector(x, y, z, player, text, type)
-        pingList.push(r);
-        if (settings.delete_waypoint_after != 0) {
-            setTimeout(() => {
-                pingList.splice(pingList.indexOf(r));
-            }, settings.delete_waypoint_after);
-        }
-    }
-    ChatLib.chat("Ping fetched from " + player);
 }).setCriteria("${player}: x: ${x}, y: ${y}, z: ${z} t: ${text}, t:${type}. Generated using Cookie Utils /cu").setContains();
 
+//fetches waypoints from other users using !rwp
+register("chat", (player, event) => {
+    ChatLib.chat("eheheh");
+    if (settings.selfPing) {
+        printAMessage("pc " + "x: " + Math.floor(Player.getX()) + ", y: " + Math.floor(Player.getY()) + ", z: " + Math.floor(Player.getZ()) + " t: " + "null" + ", t:" + ". Generated using Cookie Utils /cu", settings.addText);
+    }
+}).setCriteria("${player}: !rwp").setContains();
 /*
 References
 tablist = TabList?.getNames()?.map(name => name?.removeFormatting());

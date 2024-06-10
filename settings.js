@@ -31,7 +31,7 @@ import {
     getSubcategoryComparator: () => (a, b) => {
         // These function examples will sort the subcategories by the order in the array, so eeeeeee
         // will be above Category.
-        const subcategories = ["Ping", "Dungeons"];
+        const subcategories = ["Ping", "Dungeons", "Party Commands"];
 
         return subcategories.indexOf(a.getValue()[0].attributesExt.subcategory) -
             subcategories.indexOf(b.getValue()[0].attributesExt.subcategory);
@@ -44,6 +44,13 @@ import {
     }
 })
 class Settings {
+    @SwitchProperty({
+        name: 'Accept Pings',
+        description: 'Accept whether you want to recieve pings (from others) using Cookie Utils',
+        category: 'General',
+        subcategory: 'Ping',
+    })
+    acceptPings = true;
 
     @TextProperty({
         name: 'Default Ping Text',
@@ -52,7 +59,6 @@ class Settings {
         subcategory: 'Ping',
     })
     pingText = '';
-
 
     @SelectorProperty({
         name: 'Ping shape',
@@ -152,6 +158,14 @@ class Settings {
         subcategory: 'Dungeons',
     })
     m7Drags = false;
+
+    @SwitchProperty({
+        name: 'Self Ping Command',
+        description: 'Send a waypoint when pinged using rwp',
+        category: 'General',
+        subcategory: 'Party Commands',
+    })
+    selfPing = true;
 
     constructor() {
         this.initialize(this);

@@ -84,4 +84,21 @@ function printAMessage(message, addString) {
     }
 }
 
-export { Vector, pseudoString, printAMessage};
+/**
+ * Plays a sound and sets cooldown
+ * 
+ * @param {Sound} sound - A sound ogg file from constants.js 
+ * @param {Number} cd - Cooldown caused by sound play.
+ */
+let soundCD = false;
+function playSound(sound, cd) {
+    if (soundCD === true) return;
+
+    sound.play();
+    soundCD = true;
+    setTimeout(() => {
+        soundCD = false;
+    }, cd);
+}
+
+export { Vector, pseudoString, printAMessage, playSound};
