@@ -50,8 +50,15 @@ register('renderWorld', () => {
     }
 });
 
-register("chat", (dragon, event) => {
+register("chat", (event) => {
     if (settings.m7Drags) {
+        ChatLib.say("pc x: 26, y: 18, z: 92 t: GREEN, t:BOX. Generated using Cookie Utils / cu");
+        setTimeout(ChatLib.say("pc x: 82, y: 18, z: 96 t: BLUE, t:BOX. Generated using Cookie Utils /cu"), 1000);
+        setTimeout(ChatLib.say("pc x: 83, y: 18, z: 57 t: ORANGE, t:BOX. Generated using Cookie Utils /cu"), 2000);
+        setTimeout(ChatLib.say("pc x: 56, y: 20, z: 124 t: SOUL, t:BOX. Generated using Cookie Utils /cu"), 5000);
+        setTimeout(ChatLib.say("pc x: 27, y: 18, z: 56 t: RED, t:BOX. Generated using Cookie Utils /cu"), 10000); 
+
+        /*
         if (dragon == "APEX") {
             printAMessage("pc x: 26, y: 18, z: 92 t: GREEN, t:BOX. Generated using Cookie Utils / cu", settings.addText);
         } else if (dragon == "ICE") {
@@ -63,8 +70,9 @@ register("chat", (dragon, event) => {
         } else if (dragon == "POWER") {
             printAMessage("pc x: 27, y: 18, z: 56 t: RED, t:BOX. Generated using Cookie Utils /cu", settings.addText);
         }
+        */
     }
-}).setCriteria("The ${dragon} dragon is spawning!").setContains();
+}).setCriteria("[BOSS] Wither King: We will decide it all, here, now.").setContains();
 
 //called every tick
 register("tick", () => {
