@@ -1,7 +1,7 @@
 import RenderLib from "../RenderLib/index.js";
 import settings from "./settings";
 import "./functions.js";
-import { Vector, pseudoString, printAMessage, playSound } from "./functions.js";
+import { Vector, pseudoString, printAMessage, playSound, CountdownTitle } from "./functions.js";
 
 //all variables are defined here in order to limit the chances of a memory leak occuring
 let testBlock = null;
@@ -47,17 +47,31 @@ register('renderWorld', () => {
         } else {
             Tessellator.drawString(wptext, wpx + 0.5, wpy + 1, wpz + 0.5);
         }
+        
     }
 });
 
+
+
+// m7 p5 dragon lb waypoints
 register("chat", (event) => {
     if (settings.m7Drags) {
         ChatLib.command("chat p");
-        ChatLib.say("pc x: 26, y: 18, z: 92 t: GREEN, t:BOX. Generated using Cookie Utils / cu");
-        setTimeout(ChatLib.say("x: 82, y: 18, z: 96 t: BLUE, t:BOX. Generated using Cookie Utils /cu"), 1000);
-        setTimeout(ChatLib.say("x: 83, y: 18, z: 57 t: ORANGE, t:BOX. Generated using Cookie Utils /cu"), 2000);
-        setTimeout(ChatLib.say("x: 56, y: 20, z: 124 t: SOUL, t:BOX. Generated using Cookie Utils /cu"), 5000);
-        setTimeout(ChatLib.say("x: 27, y: 18, z: 56 t: RED, t:BOX. Generated using Cookie Utils /cu"), 10000); 
+        (function () {
+            ChatLib.say("x: 26, y: 18, z: 92 t: GREEN, t:BOX. Generated using Cookie Utils / cu");
+            setTimeout(() => {
+                ChatLib.say("x: 82, y: 18, z: 96 t: BLUE, t:BOX. Generated using Cookie Utils /cu");
+            }, 200);
+            setTimeout(() => {
+                ChatLib.say("x: 83, y: 18, z: 57 t: ORANGE, t:BOX. Generated using Cookie Utils /cu");
+            }, 400);
+            setTimeout(() => {
+                ChatLib.say("x: 56, y: 20, z: 124 t: SOUL, t:BOX. Generated using Cookie Utils /cu");
+            }, 600);
+            setTimeout(() => {
+                ChatLib.say("x: 27, y: 18, z: 56 t: RED, t:BOX. Generated using Cookie Utils /cu");
+            }, 800);
+        })();
 
         /*
         if (dragon == "APEX") {
@@ -74,6 +88,23 @@ register("chat", (event) => {
         */
     }
 }).setCriteria("[BOSS] Wither King: We will decide it all, here, now.").setContains();
+
+
+
+// DESIGNATED TEST AREA
+register("command", () => {
+    ChatLib.chat("TESTING ZONEEEEE");
+    // JUST THROW CODE HERE WE USE THIS AS DEBUGGING ZONE NOW
+
+
+
+
+}).setName("t");
+
+
+
+
+
 
 //called every tick
 register("tick", () => {
@@ -147,6 +178,7 @@ register("command", (user, text, type) => {
     
     //posting in chat
     if (testBlock.getY() < 300 && testBlock.getY() > 0) {
+
         ChatLib.chat("Block at: " + Math.floor(testBlock.getX()) + ", " + Math.floor(testBlock.getY()) + ", " + Math.floor(testBlock.getZ()) + " is: " + World.getBlockAt(Math.floor(testBlock.getX()), Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())).getType().getName());
         printAMessage("pc " + "x: " + Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY()) + ", z: " + Math.floor(testBlock.getZ()) + " t: " + text + ", t:" + type + ". Generated using Cookie Utils /cu", settings.addText);
     } else {
@@ -210,6 +242,13 @@ register("chat", (player, event) => {
         printAMessage("pc " + "x: " + Math.floor(Player.getX()) + ", y: " + Math.floor(Player.getY()) + ", z: " + Math.floor(Player.getZ()) + " t: " + "null" + ", t:" + ". Generated using Cookie Utils /cu", settings.addText);
     }
 }).setCriteria("${player}: !rwp").setContains();
+
+
+//
+register("chat", (seconds, event) => {
+    CountdownTitle(seconds);
+}).setCriteria("!cdt ${seconds}").setContains();
+
 /*
 References
 tablist = TabList?.getNames()?.map(name => name?.removeFormatting());

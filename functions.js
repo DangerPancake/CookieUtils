@@ -65,6 +65,16 @@ class Vector {
     }
 }
 
+function CountdownTitle(seconds) {
+    for (let i = seconds; i >= 0; i--) {
+        (function (i) {
+            setTimeout(() => {
+                Client.showTitle(i, "", 10, 30, 10)
+            }, (seconds - i) * 1000);
+        })(i);
+    }
+}
+
 function pseudoString(length) {
     let string = "";
     for (let i = 0; i < length - 1; i++) {
@@ -101,4 +111,4 @@ function playSound(sound, cd) {
     }, cd);
 }
 
-export { Vector, pseudoString, printAMessage, playSound};
+export { Vector, pseudoString, printAMessage, playSound, CountdownTitle };
