@@ -152,6 +152,14 @@ class Settings {
     addText = false;
 
     @SwitchProperty({
+        name: 'Mage Sheep Cooldown',
+        description: 'Reminds you of your sheep cooldown',
+        category: 'General',
+        subcategory: 'Dungeons',
+    })
+    mageSheep = false;
+
+    @SwitchProperty({
         name: 'M7 Dragons Autoping',
         description: 'Automatically sends a ping for where to shoot Last Breath during M7 P5',
         category: 'General',

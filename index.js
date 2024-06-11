@@ -1,7 +1,7 @@
 import RenderLib from "../RenderLib/index.js";
 import settings from "./settings";
 import "./functions.js";
-import { Vector, pseudoString, printAMessage, playSound, CountdownTitle } from "./functions.js";
+import { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint } from "./functions.js";
 
 //all variables are defined here in order to limit the chances of a memory leak occuring
 let testBlock = null;
@@ -21,6 +21,8 @@ let [width, height] = [1, 1];
 let [red, green, blue, alpha] = [0, 0, 1, 1];
 let phase = true;
 
+const SHEEP_CLASS = Java.type('net.minecraft.entity.passive.EntitySheep').class;
+
 // const MEME = new Sound({source: "meme.ogg"}); //////////////////////////////// crashes the game so im removing for now
 
 //renders pings
@@ -31,7 +33,7 @@ register('renderWorld', () => {
         let [wpx, wpy, wpz] = [Math.floor(wp.getX()), Math.floor(wp.getY()), Math.floor(wp.getZ())];
         [red, green, blue, alpha] = [settings.red, settings.green, settings.blue, 1];
         // draw Waypoint
-        if (wptype == null || wptype == "BOX") {
+        if (wptype == null || wptype == "BOX" || wptype == "null") {
             RenderLib.drawEspBox(wpx + 0.5, wpy, wpz + 0.5, width, height, red, green, blue, alpha, phase);
         } else if (wptype == "INNERBOX") {
             RenderLib.drawInnerEspBox(wpx + 0.5, wpy, wpz + 0.5, width, height, red, green, blue, alpha, phase);
@@ -51,41 +53,25 @@ register('renderWorld', () => {
     }
 });
 
-
-
 // m7 p5 dragon lb waypoints
 register("chat", (event) => {
-    if (settings.m7Drags) {
+    if (settings.m7Drags && getCurrentArea() == "Catacombs") {
         ChatLib.command("chat p");
         (function () {
-            ChatLib.say("x: 26, y: 18, z: 92 t: GREEN, t:BOX. Generated using Cookie Utils / cu");
+            sendPingWaypoint(26, 18, 92, "GREEN", " ", settings.addText);
             setTimeout(() => {
-                ChatLib.say("x: 82, y: 18, z: 96 t: BLUE, t:BOX. Generated using Cookie Utils /cu");
+                sendPingWaypoint(82, 18, 96, "BLUE", " ", settings.addText);
             }, 200);
             setTimeout(() => {
-                ChatLib.say("x: 83, y: 18, z: 57 t: ORANGE, t:BOX. Generated using Cookie Utils /cu");
+                sendPingWaypoint(83, 18, 57, "ORANGE", " ", settings.addText);
             }, 400);
             setTimeout(() => {
-                ChatLib.say("x: 56, y: 20, z: 124 t: SOUL, t:BOX. Generated using Cookie Utils /cu");
+                sendPingWaypoint(56, 20, 124, "PURPLE", " ", settings.addText);
             }, 600);
             setTimeout(() => {
-                ChatLib.say("x: 27, y: 18, z: 56 t: RED, t:BOX. Generated using Cookie Utils /cu");
+                sendPingWaypoint(27, 18, 56, "RED", " ", settings.addText);
             }, 800);
         })();
-
-        /*
-        if (dragon == "APEX") {
-            printAMessage("pc x: 26, y: 18, z: 92 t: GREEN, t:BOX. Generated using Cookie Utils / cu", settings.addText);
-        } else if (dragon == "ICE") {
-            printAMessage("pc x: 82, y: 18, z: 96 t: BLUE, t:BOX. Generated using Cookie Utils /cu", settings.addText);
-        } else if (dragon == "FLAME") {
-            printAMessage("pc x: 83, y: 18, z: 57 t: ORANGE, t:BOX. Generated using Cookie Utils /cu", settings.addText);
-        } else if (dragon == "SOUL") {
-            printAMessage("pc x: 56, y: 20, z: 124 t: SOUL, t:BOX. Generated using Cookie Utils /cu", settings.addText);
-        } else if (dragon == "POWER") {
-            printAMessage("pc x: 27, y: 18, z: 56 t: RED, t:BOX. Generated using Cookie Utils /cu", settings.addText);
-        }
-        */
     }
 }).setCriteria("[BOSS] Wither King: We will decide it all, here, now.").setContains();
 
@@ -95,29 +81,22 @@ register("chat", (event) => {
 register("command", () => {
     ChatLib.chat("TESTING ZONEEEEE");
     // JUST THROW CODE HERE WE USE THIS AS DEBUGGING ZONE NOW
-
-
-
-
 }).setName("t");
-
-
-
-
 
 
 //called every tick
 register("tick", () => {
     if (pingList.length != 0) {
         if (counter > 2) {
-            if (TabList?.getNames()?.map(name => name?.removeFormatting())[41] != lastArea && lastArea != null) {
+            if (getCurrentArea() != lastArea && lastArea != null) {
                 pingList = [];
             }
             counter = 0;
-            lastArea = TabList?.getNames()?.map(name => name?.removeFormatting())[41];
+            lastArea = getCurrentArea();
         }
         counter += 1;
     }
+    if(getCurrentArea() == "Catacombs" && settings.mageSheep && World.getAllEntitiesOfType(SHEEP_CLASS).length >= 1) {  ChatLib.chat("rehehehe");}
 });
 
 register("command", (user) => {
@@ -180,11 +159,11 @@ register("command", (user, text, type) => {
     if (testBlock.getY() < 300 && testBlock.getY() > 0) {
 
         ChatLib.chat("Block at: " + Math.floor(testBlock.getX()) + ", " + Math.floor(testBlock.getY()) + ", " + Math.floor(testBlock.getZ()) + " is: " + World.getBlockAt(Math.floor(testBlock.getX()), Math.floor(testBlock.getY()), Math.floor(testBlock.getZ())).getType().getName());
-        printAMessage("pc " + "x: " + Math.floor(testBlock.getX()) + ", y: " + Math.floor(testBlock.getY()) + ", z: " + Math.floor(testBlock.getZ()) + " t: " + text + ", t:" + type + ". Generated using Cookie Utils /cu", settings.addText);
+        sendPingWaypoint(Math.floor(testBlock.getX()), Math.floor(testBlock.getY()), Math.floor(testBlock.getZ()), text, type, settings.addText);
     } else {
         ChatLib.chat("No block found within maximum height.");
     }
-
+    ChatLib.chat(TabList?.getNames()?.map(name => name?.removeFormatting())[41]);
 }).setName("infos").setAliases("ping"); // use /infos ingame to get info!! btw i love people called makali
 
 //fetches waypoints from other users
@@ -233,20 +212,25 @@ register("chat", (player, x, y, z, text, type, event) => {
         ChatLib.chat("Ping fetched from " + player);
         // playSound(MEME, 1); ////////////////////////////////////////////// crashes the game so im removing it for now
     }
-}).setCriteria("${player}: x: ${x}, y: ${y}, z: ${z} t: ${text}, t:${type}. Generated using Cookie Utils /cu").setContains();
+}).setCriteria("${player}: x: ${x}, y: ${y}, z: ${z} t: ${text}, t:${type}. /cu").setContains();
 
 //fetches waypoints from other users using !rwp
 register("chat", (player, event) => {
     ChatLib.chat("eheheh");
     if (settings.selfPing) {
-        printAMessage("pc " + "x: " + Math.floor(Player.getX()) + ", y: " + Math.floor(Player.getY()) + ", z: " + Math.floor(Player.getZ()) + " t: " + "null" + ", t:" + ". Generated using Cookie Utils /cu", settings.addText);
+        sendPingWaypoint(Math.floor(Player.getX()), Math.floor(Player.getY()), Math.floor(Player.getZ()), "null", " ", settings.addText);
     }
 }).setCriteria("${player}: !rwp").setContains();
 
 
-//
+let countDownActive = false;
 register("chat", (seconds, event) => {
+    if (countDownActive) return;
     CountdownTitle(seconds);
+    countDownActive = true;
+    setTimeout(() => {
+        countDownActive = false;
+    }, seconds);
 }).setCriteria("!cdt ${seconds}").setContains();
 
 /*

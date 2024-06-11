@@ -6,13 +6,14 @@
 		limit_to_one_ping_of_a_text = true
 		green = 196
 		default_ping_range = 0
-		add_random_string = false
+		add_random_string = true
 		change_ping_color = false
 		ping_color = "255,78,134,139"
 		red = 0
 		limit_to_one_ping_per_player = false
 		blue = 48
 		"delete_ping_waypoints_after:" = 0
+		mage_sheep_cooldown = true
 		alpha = 2
 		selector = 0
 		percent_slider = 0.0
