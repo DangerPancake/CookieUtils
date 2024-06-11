@@ -21,7 +21,7 @@ let [width, height] = [1, 1];
 let [red, green, blue, alpha] = [0, 0, 1, 1];
 let phase = true;
 
-const MEME = new Sound({source: "meme.ogg"});
+// const MEME = new Sound({source: "meme.ogg"}); //////////////////////////////// crashes the game so im removing for now
 
 //renders pings
 register('renderWorld', () => {
@@ -52,11 +52,12 @@ register('renderWorld', () => {
 
 register("chat", (event) => {
     if (settings.m7Drags) {
+        ChatLib.command("chat p");
         ChatLib.say("pc x: 26, y: 18, z: 92 t: GREEN, t:BOX. Generated using Cookie Utils / cu");
-        setTimeout(ChatLib.say("pc x: 82, y: 18, z: 96 t: BLUE, t:BOX. Generated using Cookie Utils /cu"), 1000);
-        setTimeout(ChatLib.say("pc x: 83, y: 18, z: 57 t: ORANGE, t:BOX. Generated using Cookie Utils /cu"), 2000);
-        setTimeout(ChatLib.say("pc x: 56, y: 20, z: 124 t: SOUL, t:BOX. Generated using Cookie Utils /cu"), 5000);
-        setTimeout(ChatLib.say("pc x: 27, y: 18, z: 56 t: RED, t:BOX. Generated using Cookie Utils /cu"), 10000); 
+        setTimeout(ChatLib.say("x: 82, y: 18, z: 96 t: BLUE, t:BOX. Generated using Cookie Utils /cu"), 1000);
+        setTimeout(ChatLib.say("x: 83, y: 18, z: 57 t: ORANGE, t:BOX. Generated using Cookie Utils /cu"), 2000);
+        setTimeout(ChatLib.say("x: 56, y: 20, z: 124 t: SOUL, t:BOX. Generated using Cookie Utils /cu"), 5000);
+        setTimeout(ChatLib.say("x: 27, y: 18, z: 56 t: RED, t:BOX. Generated using Cookie Utils /cu"), 10000); 
 
         /*
         if (dragon == "APEX") {
@@ -198,7 +199,7 @@ register("chat", (player, x, y, z, text, type, event) => {
             }
         }
         ChatLib.chat("Ping fetched from " + player);
-        playSound(MEME, 1);
+        // playSound(MEME, 1); ////////////////////////////////////////////// crashes the game so im removing it for now
     }
 }).setCriteria("${player}: x: ${x}, y: ${y}, z: ${z} t: ${text}, t:${type}. Generated using Cookie Utils /cu").setContains();
 
