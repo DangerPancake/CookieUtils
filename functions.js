@@ -65,6 +65,90 @@ class Vector {
     }
 }
 
+
+/// get the world instance with this command!!!
+class WorldInstance {
+
+    constructor() {
+        const minecraft = Java.type('net.minecraft.client.Minecraft').func_71410_x(); // .getMinecraft()s obfuscated method
+        const player = minecraft.field_71439_g; // obfuscated, gets the Player
+        this.world = player.field_70170_p; // obfuscated, gets the world instance the player is currently in
+        this.minecraft = minecraft;
+        this.player = player;
+    }
+
+    getMinecraft() {
+        return this.minecraft;
+    }
+
+    getPlayerInstance() {
+        if (!this.player) {
+            ChatLib.chat("Player instance is undefined.");
+        }
+        return player;
+    }
+
+    getWorldInstance() {
+        return this.world;
+    }
+
+}
+
+/// check if entities are around you!!!
+const AxisAlignedBB = Java.type('net.minecraft.util.AxisAlignedBB');
+function GetEntitiesWithinAABB(Entity, range) {                /// Object = around what object to check?    Entity = check for what Entities?   range = How far away can the Entity be?
+    let world = new WorldInstance();
+    let boundingBox = new AxisAlignedBB(
+        Player.getX() - range, Player.getY() - range, Player.getZ() - range,
+        Player.getX() + range, Player.getY() + range, Player.getZ() + range
+    );
+
+    return world.getWorldInstance().func_72872_a(Entity, boundingBox); // obfuscated method for getEntitiesWithinAABB()       please make sure you pass the Entity.class() in it
+}
+
+
+
+
+
+/*
+    function isSheepWithinRange() {
+        let boundingBox = new AxisAlignedBB(
+            Player.getX() - 1, Player.getY() - 1, Player.getZ() - 1,
+            Player.getX() + 1, Player.getY() + 1, Player.getZ() + 1
+        );
+
+        let minecraft = Minecraft.func_71410_x();
+        let player = minecraft.field_71439_g;
+        let world = player.field_70170_p;
+        let sheepList = world.func_72872_a(EntitySheep.class, boundingBox);
+
+        try {
+            return sheepList[0];
+        }
+        catch (err) {
+            return null;
+        }
+    }
+
+
+    let isNearby = isSheepWithinRange();
+    ChatLib.chat(isNearby);
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
 function CountdownTitle(seconds) {
     for (let i = seconds; i >= 0; i--) {
         (function (i) {
@@ -128,4 +212,4 @@ function sendPingWaypoint(x, y, z, t, ty, p) {
     printAMessage("x: " + x + ", y: " + y + ", z: " + z + " t: " + t + ", t:" + ty + ". /cu", p)
 }
 
-export { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint };
+export { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB };

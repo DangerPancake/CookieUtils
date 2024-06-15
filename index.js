@@ -1,7 +1,7 @@
 import RenderLib from "../RenderLib/index.js";
 import settings from "./settings";
 import "./functions.js";
-import { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint } from "./functions.js";
+import { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB } from "./functions.js";
 
 //all variables are defined here in order to limit the chances of a memory leak occuring
 let testBlock = null;
@@ -21,7 +21,10 @@ let [width, height] = [1, 1];
 let [red, green, blue, alpha] = [0, 0, 1, 1];
 let phase = true;
 
+world = new WorldInstance();
 const SHEEP_CLASS = Java.type('net.minecraft.entity.passive.EntitySheep').class;
+let nearbySheep = undefined;
+let Cooldown = false;
 
 // const MEME = new Sound({source: "meme.ogg"}); //////////////////////////////// crashes the game so im removing for now
 
@@ -75,14 +78,17 @@ register("chat", (event) => {
     }
 }).setCriteria("[BOSS] Wither King: We will decide it all, here, now.").setContains();
 
-
-
 // DESIGNATED TEST AREA
 register("command", () => {
     ChatLib.chat("TESTING ZONEEEEE");
     // JUST THROW CODE HERE WE USE THIS AS DEBUGGING ZONE NOW
-}).setName("t");
+}).setName("test");
 
+// reassigns the 
+function onWorldLoad() {
+    world = new WorldInstance();
+}
+register("worldLoad", onWorldLoad);
 
 //called every tick
 register("tick", () => {
@@ -96,9 +102,25 @@ register("tick", () => {
         }
         counter += 1;
     }
-    if(getCurrentArea() == "Catacombs" && settings.mageSheep && World.getAllEntitiesOfType(SHEEP_CLASS).length >= 1) {  ChatLib.chat("rehehehe");}
+    
+    if (Cooldown == false && getCurrentArea() == "Catacombs" && settings.mageSheep) {
+        nearbySheep = GetEntitiesWithinAABB(SHEEP_CLASS, 5);
+        ChatLib.chat(nearbySheep.length);
+        //ChatLib.chat("Cooldown?: " + Cooldown);
+        if (nearbySheep[0] != undefined) {
+            //ChatLib.chat("cooldown!!!");
+            Cooldown = true;
+            CountdownTitle(5); /// PLACEHOLDER IT SHOWS THE CDT SINCE I DONT HAVE NAYTHING ELSE RN
+            setTimeout(() => {
+                Cooldown = false;
+            }, 5000);
+        }
+    }
+    
+
 });
 
+//opens up the cookie utils GUI
 register("command", (user) => {
     if (user == null || user == "" || user == "settings") {
         settings.openGUI();
@@ -106,8 +128,7 @@ register("command", (user) => {
     if (user == "cp" || user == "clearping") {
         pingList = [];
     }
-}).setName("cu").setAliases("cookieutils"); 
-
+}).setName("cu").setAliases("cookieutils");
 
 //creates a new ping depending on where the player is looking and posts it in chat
 register("command", (user, text, type) => {
@@ -222,7 +243,7 @@ register("chat", (player, event) => {
     }
 }).setCriteria("${player}: !rwp").setContains();
 
-
+//displays a countdown on your screen
 let countDownActive = false;
 register("chat", (seconds, event) => {
     if (countDownActive) return;
