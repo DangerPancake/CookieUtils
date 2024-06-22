@@ -1,7 +1,7 @@
 import RenderLib from "../RenderLib/index.js";
 import settings from "./settings";
 import "./functions.js";
-import { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB } from "./functions.js";
+import { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB, MageCDR, EntityNBTData } from "./functions.js";
 
 //all variables are defined here in order to limit the chances of a memory leak occuring
 let testBlock = null;
@@ -21,12 +21,17 @@ let [width, height] = [1, 1];
 let [red, green, blue, alpha] = [0, 0, 1, 1];
 let phase = true;
 
-world = new WorldInstance();
+let world = null;
 const SHEEP_CLASS = Java.type('net.minecraft.entity.passive.EntitySheep').class;
 let nearbySheep = undefined;
 let Cooldown = false;
-
+let Mage_Level = 41;
+let SoloMage = true;
+let RegularAbilityCD = 30; // mages guided sheep cd = 30s by default
+let trueRegularAbilityCD = RegularAbilityCD * (1 - MageCDR(Mage_Level, SoloMage));
 // const MEME = new Sound({source: "meme.ogg"}); //////////////////////////////// crashes the game so im removing for now
+
+
 
 //renders pings
 register('renderWorld', () => {
@@ -78,15 +83,22 @@ register("chat", (event) => {
     }
 }).setCriteria("[BOSS] Wither King: We will decide it all, here, now.").setContains();
 
+
 // DESIGNATED TEST AREA
 register("command", () => {
     ChatLib.chat("TESTING ZONEEEEE");
     // JUST THROW CODE HERE WE USE THIS AS DEBUGGING ZONE NOW
+    let armorstandclass = Java.type("net.minecraft.entity.item.EntityArmorStand");
+    World.getAllEntitiesOfType(net.minecraft.entity.item.EntityArmorStand).forEach((e) => {
+        ChatLib.chat(e.getName());
+    });
+
 }).setName("test");
 
 // reassigns the 
 function onWorldLoad() {
     world = new WorldInstance();
+    //ChatLib.chat("Creating new World Instance.");
 }
 register("worldLoad", onWorldLoad);
 
@@ -105,20 +117,20 @@ register("tick", () => {
     
     if (Cooldown == false && getCurrentArea() == "Catacombs" && settings.mageSheep) {
         nearbySheep = GetEntitiesWithinAABB(SHEEP_CLASS, 5);
-        ChatLib.chat(nearbySheep.length);
-        //ChatLib.chat("Cooldown?: " + Cooldown);
         if (nearbySheep[0] != undefined) {
-            //ChatLib.chat("cooldown!!!");
             Cooldown = true;
-            CountdownTitle(5); /// PLACEHOLDER IT SHOWS THE CDT SINCE I DONT HAVE NAYTHING ELSE RN
+            CountdownTitle(Math.floor(trueRegularAbilityCD)); /// PLACEHOLDER IT SHOWS THE CDT SINCE I DONT HAVE NAYTHING ELSE RN
+            ChatLib.chat(EntityNBTData(nearbySheep[0]));
             setTimeout(() => {
                 Cooldown = false;
-            }, 5000);
+            }, trueRegularAbilityCD * 1000);
         }
     }
     
 
 });
+
+
 
 //opens up the cookie utils GUI
 register("command", (user) => {

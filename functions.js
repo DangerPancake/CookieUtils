@@ -84,8 +84,9 @@ class WorldInstance {
     getPlayerInstance() {
         if (!this.player) {
             ChatLib.chat("Player instance is undefined.");
+            return null;
         }
-        return player;
+        return this.player;
     }
 
     getWorldInstance() {
@@ -103,11 +104,33 @@ function GetEntitiesWithinAABB(Entity, range) {                /// Object = arou
         Player.getX() + range, Player.getY() + range, Player.getZ() + range
     );
 
-    return world.getWorldInstance().func_72872_a(Entity, boundingBox); // obfuscated method for getEntitiesWithinAABB()       please make sure you pass the Entity.class() in it
+    let entities = world.getWorldInstance().func_72872_a(Entity, boundingBox); // obfuscated method for getEntitiesWithinAABB()       please make sure you pass the Entity.class() in it
+    
+    let array = [];
+    for (let i = 0; i < entities.length; i++) {
+        array.push(entities[i]);
+    }
+    return array;
+    
+}
+
+function MageCDR(Mage_level, soloMage) {
+    let base = 0.25;
+    if (soloMage) { base *= 2; }
+    base += Math.floor(Mage_level / 2) / 100;
+    return base;
 }
 
 
-
+/// returns the nbt data of an entity
+const NBTTagComp = Java.type('net.minecraft.nbt.NBTTagCompound');
+function EntityNBTData(ENTITYCLASS) {
+    let nbt = new NBTTagComp();
+    let randomentity = ENTITYCLASS;
+    randomentity.func_70109_d(nbt);
+    ChatLib.chat(nbt);
+    return nbt;
+}
 
 
 /*
@@ -212,4 +235,4 @@ function sendPingWaypoint(x, y, z, t, ty, p) {
     printAMessage("x: " + x + ", y: " + y + ", z: " + z + " t: " + t + ", t:" + ty + ". /cu", p)
 }
 
-export { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB };
+export { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB, MageCDR, EntityNBTData };
