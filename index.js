@@ -1,7 +1,7 @@
 import RenderLib from "../RenderLib/index.js";
 import settings from "./settings";
 import "./functions.js";
-import { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB, MageCDR, EntityNBTData } from "./functions.js";
+import { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB, MageCDR, EntityNBTData, updateTimer } from "./functions.js";
 
 //all variables are defined here in order to limit the chances of a memory leak occuring
 let testBlock = null;
@@ -23,12 +23,21 @@ let phase = true;
 
 let world = null;
 const SHEEP_CLASS = Java.type('net.minecraft.entity.passive.EntitySheep').class;
+const SKELETON_CLASS = Java.type('net.minecraft.entity.monster.EntitySkeleton').class;
+const arrow = Java.type("net.minecraft.entity.projectile.EntityArrow");
+const EntityClass = Java.type('net.minecraft.entity.Entity').class;
 let nearbySheep = undefined;
 let Cooldown = false;
 let Mage_Level = 41;
 let SoloMage = true;
 let RegularAbilityCD = 30; // mages guided sheep cd = 30s by default
 let trueRegularAbilityCD = RegularAbilityCD * (1 - MageCDR(Mage_Level, SoloMage));
+
+import PogObject from "../PogData/index.js";
+let SheepTimer = trueRegularAbilityCD * 1000;
+let timerArray = [trueRegularAbilityCD * 1000];
+//timerArray = updateTimer(timer, timerArray);
+
 // const MEME = new Sound({source: "meme.ogg"}); //////////////////////////////// crashes the game so im removing for now
 
 
@@ -88,12 +97,34 @@ register("chat", (event) => {
 register("command", () => {
     ChatLib.chat("TESTING ZONEEEEE");
     // JUST THROW CODE HERE WE USE THIS AS DEBUGGING ZONE NOW
-    let armorstandclass = Java.type("net.minecraft.entity.item.EntityArmorStand");
-    World.getAllEntitiesOfType(net.minecraft.entity.item.EntityArmorStand).forEach((e) => {
-        ChatLib.chat(e.getName());
-    });
+    timerArray = updateTimer(SheepTimer, timerArray);
 
 }).setName("test");
+
+
+
+// POGDATA 
+const data = new PogObject("CookieUtils", {
+    x: 200,
+    y: 100,
+    timer: SheepTimer.toFixed(2).toString(),
+    text: "SHEEP TIMER:"
+});
+data.autosave();
+
+/*
+register("renderOverlay", () => {
+    Renderer.drawString(`${data.text} ${data.timer.toString()} `, data.x, data.y, true);
+});
+
+
+*/
+
+
+
+
+
+
 
 // reassigns the 
 function onWorldLoad() {
@@ -114,19 +145,37 @@ register("tick", () => {
         }
         counter += 1;
     }
+
     
+    /*
     if (Cooldown == false && getCurrentArea() == "Catacombs" && settings.mageSheep) {
+
+        
+
         nearbySheep = GetEntitiesWithinAABB(SHEEP_CLASS, 5);
         if (nearbySheep[0] != undefined) {
             Cooldown = true;
-            CountdownTitle(Math.floor(trueRegularAbilityCD)); /// PLACEHOLDER IT SHOWS THE CDT SINCE I DONT HAVE NAYTHING ELSE RN
-            ChatLib.chat(EntityNBTData(nearbySheep[0]));
+            //CountdownTitle(Math.floor(trueRegularAbilityCD)); /// PLACEHOLDER IT SHOWS THE CDT SINCE I DONT HAVE NAYTHING ELSE RN
+            timerArray = updateTimer(SheepTimer, timerArray);
+            //ChatLib.chat(EntityNBTData(nearbySheep[0]));
             setTimeout(() => {
                 Cooldown = false;
-            }, trueRegularAbilityCD * 1000);
+                timerArray = [trueRegularAbilityCD*1000];
+            }, trueRegularAbilityCD * 1000); 
         }
+
+        
     }
-    
+    if (Math.floor(timerArray[timerArray.length - 1]) == Math.floor(trueRegularAbilityCD) * 1000) {
+        data.timer = "&2READY!!!&r";
+        SheepTimer = timerArray[timerArray.length - 1];
+        } else {
+            data.timer = SheepTimer.toFixed(2).toString();
+            SheepTimer = timerArray[timerArray.length - 1];
+        }
+
+
+    */
 
 });
 

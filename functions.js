@@ -97,7 +97,7 @@ class WorldInstance {
 
 /// check if entities are around you!!!
 const AxisAlignedBB = Java.type('net.minecraft.util.AxisAlignedBB');
-function GetEntitiesWithinAABB(Entity, range) {                /// Object = around what object to check?    Entity = check for what Entities?   range = How far away can the Entity be?
+function GetEntitiesWithinAABB(Entity, range = 2) {                /// Object = around what object to check?    Entity = check for what Entities?   range = How far away can the Entity be?
     let world = new WorldInstance();
     let boundingBox = new AxisAlignedBB(
         Player.getX() - range, Player.getY() - range, Player.getZ() - range,
@@ -127,7 +127,12 @@ const NBTTagComp = Java.type('net.minecraft.nbt.NBTTagCompound');
 function EntityNBTData(ENTITYCLASS) {
     let nbt = new NBTTagComp();
     let randomentity = ENTITYCLASS;
-    randomentity.func_70109_d(nbt);
+    try {
+        randomentity.func_70109_d(nbt);
+    } catch (err) {
+        ChatLib.chat("${randomentity.class} doesnt have fetchable nbt data");
+    }
+    
     ChatLib.chat(nbt);
     return nbt;
 }
@@ -162,8 +167,70 @@ function EntityNBTData(ENTITYCLASS) {
 
 
 
+// Function to update the timer
+function updateTimer(timer, timerArray) {
+    // Function to update the timer and manage intervals
+    function updateTime() {
+        // Calculate seconds, tenths, and hundredths
+        let seconds = Math.floor(timer / 1000);
+        let tenths = Math.floor((timer % 1000) / 100);
+        let hundredths = Math.floor((timer % 100) / 10);
+
+        // Format timer value as a float
+        let formattedTimer = parseFloat(`${seconds}.${tenths}${hundredths}`);
+
+        // Set external timer variable
+        setExternalTimer(formattedTimer);
+
+        // removes old timer entries so your pc doesnt explode
+        if (timerArray.length > 5) {
+            timerArray.shift();
+        }
+
+        // Push current timer value to array
+        timerArray.push(formattedTimer);
+
+        // Decrement timer
+        timer -= 10;
+
+        // Check if timer has reached 0
+        if (timer >= 0) {
+            setTimeout(updateTime, 10); // Call updateTime after 10 milliseconds
+        } else {
+            console.log("Timer has reached 0!");
+            setExternalTimer(0); // Signal that timer has reached 0
+        }
+    }
+
+    // Function to set external timer variable
+    function setExternalTimer(value) {
+        externalTimer = value;
+        console.log(`External timer updated: ${externalTimer}`);
+    }
+
+    // Initial call to start updating time
+    updateTime();
+
+    // Return the timer array for external manipulation if needed
+    return timerArray;
+}
 
 
+
+
+
+
+
+
+
+
+
+
+
+// Format milliseconds to always display two digits after the decimal point
+// milliseconds.toString() = 520
+// padStart(how many chars in the String?, add this char if the string has less than that amount of symbols on the beginning)
+// "Hi".padStart(10, "a") => "aaaaaaaaHi"
 
 
 
@@ -235,4 +302,4 @@ function sendPingWaypoint(x, y, z, t, ty, p) {
     printAMessage("x: " + x + ", y: " + y + ", z: " + z + " t: " + t + ", t:" + ty + ". /cu", p)
 }
 
-export { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB, MageCDR, EntityNBTData };
+export { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB, MageCDR, EntityNBTData, updateTimer };
