@@ -309,36 +309,36 @@ function GoldorClassTerminals(Tank, Archer, Bers, Mage, Healer, f7p3section) {  
     switch (section) {
         case 1:
             (function () {
-                Tank && ChatLib.command("tell " + Tank + " x: 111, y: 113, z: 73 t: 1, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                Tank && ChatLib.command("tell " + Tank + " x: 111, y: 113, z: 73 t: 1, t:INNERBOX. /cu " + "TRQARFASGAFAF");
                 setTimeout(() => {
-                    Mage && ChatLib.command("tell " + Mage + " x: 111, y: 119, z: 79 t: 2, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                    Mage && ChatLib.command("tell " + Mage + " x: 111, y: 119, z: 79 t: 2, t:INNERBOX. /cu " + "QUZIZDNBDKOI");
                 }, tellDelay);
                 setTimeout(() => {
-                    Bers && ChatLib.command("tell " + Bers + " x: 89, y: 112, z: 92 t: 3, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                    Healer && ChatLib.command("tell " + Healer + " x: 110, y: 119, z: 93 t:device, t:INNERBOX. /cu " + "FAAFUHAIHFIUFHIH");
                 }, tellDelay*2);
                 setTimeout(() => {
-                    Archer && ChatLib.command("tell " + Archer + " x: 89, y: 122, z: 101 t: 4, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                    Bers && ChatLib.command("tell " + Bers + " x: 89, y: 112, z: 92 t: 3, t:INNERBOX. /cu " + "FUHFIUHFIAUHD");
                 }, tellDelay*3);
                 setTimeout(() => {
-                    Healer && ChatLib.command("tell " + Healer + "  x: 110, y: 119, z: 93 t:device, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                    Archer && ChatLib.command("tell " + Archer + " x: 89, y: 122, z: 101 t: 4, t:INNERBOX. /cu " + "cFDAUHFIHFU");
                 }, tellDelay*4);
                 ChatLib.chat("&2section " + section + "&r");
             })();
             break;
         case 2:
             (function () {
-                Tank && ChatLib.command("tell " + Tank + " x: 68, y: 109, z: 121 t: 1, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                Tank && ChatLib.command("tell " + Tank + " x: 68, y: 109, z: 121 t: 1, t:INNERBOX. /cu " + "ABBBDUDUBDUBD");
                 setTimeout(() => {
-                    Mage && ChatLib.command("tell " + Mage + " x: 59, y: 120, z: 122 t: 2, t:BOX. /cu " + pseudoString(pseudoStringLength));
+                    Healer && ChatLib.command("tell " + Healer + " x: 60, y: 131, z: 141 t:device, t:BOX. /cu " + "LLVVLVLVLVFKKFF");
                 }, tellDelay);
                 setTimeout(() => {
-                    Bers && ChatLib.command("tell " + Bers + " x: 47, y: 109, z: 121 t: 3, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                    Mage && ChatLib.command("tell " + Mage + " x: 59, y: 120, z: 122 t: 2, t:BOX. /cu " + "SFEQRFAFAERFQRQ");
                 }, tellDelay*2);
                 setTimeout(() => {
-                    Archer && ChatLib.command("tell " + Archer + " x: 39, y: 108, z: 143 t: 4, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                    Bers && ChatLib.command("tell " + Bers + " x: 47, y: 109, z: 121 t: 3, t:INNERBOX. /cu " + "FEFAFEAFFAFAEFAE");
                 }, tellDelay*3);
                 setTimeout(() => {
-                    Healer && ChatLib.command("tell " + Healer + " x: 60, y: 131, z: 141 t:device, t:BOX. /cu " + pseudoString(pseudoStringLength));
+                    Archer && ChatLib.command("tell " + Archer + " x: 39, y: 108, z: 143 t: 4, t:INNERBOX. /cu " + "HJHHRRHHRHRHRH");
                 }, tellDelay*4);
                 ChatLib.chat("&2section " + section + "&r");
             }) ();
@@ -346,36 +346,36 @@ function GoldorClassTerminals(Tank, Archer, Bers, Mage, Healer, f7p3section) {  
             
         case 3:
             (function () {
-                Tank && ChatLib.command("tell " + Tank + " x: -3, y: 109, z: 112 t: 1, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                Tank && ChatLib.command("tell " + Tank + " x: -3, y: 109, z: 112 t: 1, t:INNERBOX. /cu " + "BNDJDBDBJDBDJDBJ");
                 setTimeout(() => {
-                    Mage && ChatLib.command("tell " + Mage + " x: -3, y: 119, z: 93 t: 2, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                    Mage && ChatLib.command("tell " + Mage + " x: -3, y: 119, z: 93 t: 2, t:INNERBOX. /cu " + "CABCAZCBZBCZBCZA");
                 }, tellDelay);
                 setTimeout(() => {
-                    Bers && ChatLib.command("tell " + Bers + " x: 19, y: 123, z: 93 t: 3, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                    Bers && ChatLib.command("tell " + Bers + " x: 19, y: 123, z: 93 t: 3, t:INNERBOX. /cu " + "FAUHIFAHFAUIHFBN");
                 }, tellDelay*2);
                 setTimeout(() => {
-                    Archer && ChatLib.command("tell " + Archer + " x: -3, y: 109, z: 77 t: 4, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                    Archer && ChatLib.command("tell " + Archer + " x: -3, y: 109, z: 77 t: 4, t:INNERBOX. /cu " + "CCCCCJJCJJCFFKK");
                 }, tellDelay*3);
                 setTimeout(() => {
-                    Healer && ChatLib.command("tell " + Healer + " x: -1, y: 119, z: 77 t: device, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                    Healer && ChatLib.command("tell " + Healer + " x: -1, y: 119, z: 77 t: device, t:INNERBOX. /cu " + "FFFJFJFJJDIJOOOO");
                 }, tellDelay*4);
                 ChatLib.chat("&2section " + section + "&r");
             }) ();
             break;
         case 4:
             (function () {
-                Tank && ChatLib.command("tell " + Tank + " x: 41, y: 109, z: 29 t: 1, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                Tank && ChatLib.command("tell " + Tank + " x: 41, y: 109, z: 29 t: 1, t:INNERBOX. /cu " + "PPPOFOFOFOPF");
                 setTimeout(() => {
-                    Mage && ChatLib.command("tell " + Mage + " x: 44, y: 121, z: 29 t: 2, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                    Mage && ChatLib.command("tell " + Mage + " x: 44, y: 121, z: 29 t: 2, t:INNERBOX. /cu " + "LETITGO");
                 }, tellDelay);
                 setTimeout(() => {
-                    Bers && ChatLib.command("tell " + Bers + " x: 67, y: 109, z: 29 t: 3, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                    Bers && ChatLib.command("tell " + Bers + " x: 67, y: 109, z: 29 t: 3, t:INNERBOX. /cu " + "UHFIAUHFIFAHFIUA");
                 }, tellDelay*2);
                 setTimeout(() => {
-                    Archer && ChatLib.command("tell " + Archer + " x: 72, y: 115, z: 48 t: 4, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                    Healer && ChatLib.command("tell " + Healer + " x: 63, y: 127, z: 35 t: device, t:INNERBOX. /cu " + "FFAFIJHOAMMMMM");
                 }, tellDelay*3);
                 setTimeout(() => {
-                    Healer && ChatLib.command("tell " + Healer + " x: 63, y: 127, z: 35 t: device, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                    Archer && ChatLib.command("tell " + Archer + " x: 72, y: 115, z: 48 t: 4, t:INNERBOX. /cu " + "FFFFHFHFUBBBBBBB");
                 }, tellDelay*4);
                 ChatLib.chat("&2section " + section + "&r");
             })();
