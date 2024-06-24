@@ -227,12 +227,6 @@ function updateTimer(timer, timerArray) {
 
 
 
-// Format milliseconds to always display two digits after the decimal point
-// milliseconds.toString() = 520
-// padStart(how many chars in the String?, add this char if the string has less than that amount of symbols on the beginning)
-// "Hi".padStart(10, "a") => "aaaaaaaaHi"
-
-
 
 
 
@@ -302,4 +296,117 @@ function sendPingWaypoint(x, y, z, t, ty, p) {
     printAMessage("x: " + x + ", y: " + y + ", z: " + z + " t: " + t + ", t:" + ty + ". /cu", p)
 }
 
-export { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB, MageCDR, EntityNBTData, updateTimer };
+
+
+
+
+// GOLDOR CLASS TERMINALS
+function GoldorClassTerminals(Tank, Archer, Bers, Mage, Healer, f7p3section) {  // basically self explanatory but: name of the people assigned the class term        f7p3section: what section of the p3 you are in (integer)
+    let section = f7p3section;
+    let pseudoStringLength = 10;
+    let tellDelay = 700; //in ms
+
+    switch (section) {
+        case 1:
+            (function () {
+                Tank && ChatLib.command("tell " + Tank + " x: 111, y: 113, z: 73 t: 1, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                setTimeout(() => {
+                    Mage && ChatLib.command("tell " + Mage + " x: 111, y: 119, z: 79 t: 2, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                }, tellDelay);
+                setTimeout(() => {
+                    Bers && ChatLib.command("tell " + Bers + " x: 89, y: 112, z: 92 t: 3, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                }, tellDelay*2);
+                setTimeout(() => {
+                    Archer && ChatLib.command("tell " + Archer + " x: 89, y: 122, z: 101 t: 4, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                }, tellDelay*3);
+                setTimeout(() => {
+                    Healer && ChatLib.command("tell " + Healer + "  x: 110, y: 119, z: 93 t:device, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                }, tellDelay*4);
+                ChatLib.chat("&2section " + section + "&r");
+            })();
+            break;
+        case 2:
+            (function () {
+                Tank && ChatLib.command("tell " + Tank + " x: 68, y: 109, z: 121 t: 1, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                setTimeout(() => {
+                    Mage && ChatLib.command("tell " + Mage + " x: 59, y: 120, z: 122 t: 2, t:BOX. /cu " + pseudoString(pseudoStringLength));
+                }, tellDelay);
+                setTimeout(() => {
+                    Bers && ChatLib.command("tell " + Bers + " x: 47, y: 109, z: 121 t: 3, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                }, tellDelay*2);
+                setTimeout(() => {
+                    Archer && ChatLib.command("tell " + Archer + " x: 39, y: 108, z: 143 t: 4, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                }, tellDelay*3);
+                setTimeout(() => {
+                    Healer && ChatLib.command("tell " + Healer + " x: 60, y: 131, z: 141 t:device, t:BOX. /cu " + pseudoString(pseudoStringLength));
+                }, tellDelay*4);
+                ChatLib.chat("&2section " + section + "&r");
+            }) ();
+            break;
+            
+        case 3:
+            (function () {
+                Tank && ChatLib.command("tell " + Tank + " x: -3, y: 109, z: 112 t: 1, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                setTimeout(() => {
+                    Mage && ChatLib.command("tell " + Mage + " x: -3, y: 119, z: 93 t: 2, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                }, tellDelay);
+                setTimeout(() => {
+                    Bers && ChatLib.command("tell " + Bers + " x: 19, y: 123, z: 93 t: 3, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                }, tellDelay*2);
+                setTimeout(() => {
+                    Archer && ChatLib.command("tell " + Archer + " x: -3, y: 109, z: 77 t: 4, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                }, tellDelay*3);
+                setTimeout(() => {
+                    Healer && ChatLib.command("tell " + Healer + " x: -1, y: 119, z: 77 t: device, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                }, tellDelay*4);
+                ChatLib.chat("&2section " + section + "&r");
+            }) ();
+            break;
+        case 4:
+            (function () {
+                Tank && ChatLib.command("tell " + Tank + " x: 41, y: 109, z: 29 t: 1, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                setTimeout(() => {
+                    Mage && ChatLib.command("tell " + Mage + " x: 44, y: 121, z: 29 t: 2, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                }, tellDelay);
+                setTimeout(() => {
+                    Bers && ChatLib.command("tell " + Bers + " x: 67, y: 109, z: 29 t: 3, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                }, tellDelay*2);
+                setTimeout(() => {
+                    Archer && ChatLib.command("tell " + Archer + " x: 72, y: 115, z: 48 t: 4, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                }, tellDelay*3);
+                setTimeout(() => {
+                    Healer && ChatLib.command("tell " + Healer + " x: 63, y: 127, z: 35 t: device, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                }, tellDelay*4);
+                ChatLib.chat("&2section " + section + "&r");
+            })();
+            break;
+        default:
+            ChatLib.chat("unknown section: " + section);
+    }
+
+
+}
+
+
+//GoldorClassTerminals("TANKIBOIII", null, 0, "", undefined, 3);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB, MageCDR, EntityNBTData, updateTimer, GoldorClassTerminals };

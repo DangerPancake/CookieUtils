@@ -1,7 +1,7 @@
 import RenderLib from "../RenderLib/index.js";
 import settings from "./settings";
 import "./functions.js";
-import { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB, MageCDR, EntityNBTData, updateTimer } from "./functions.js";
+import { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB, MageCDR, EntityNBTData, updateTimer, GoldorClassTerminals } from "./functions.js";
 
 //all variables are defined here in order to limit the chances of a memory leak occuring
 let testBlock = null;
@@ -91,6 +91,32 @@ register("chat", (event) => {
         })();
     }
 }).setCriteria("[BOSS] Wither King: We will decide it all, here, now.").setContains();
+
+
+
+
+// GOLDOR PHASE - CLASS TERMINALS
+register("chat", (section, event) => {
+    if (true) {
+        GoldorClassTerminals("Makali", "Makali", "Makali", "Makali", "Makali", Number(section));
+    }
+
+
+}).setCriteria("section ${section}").setContains();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // DESIGNATED TEST AREA
