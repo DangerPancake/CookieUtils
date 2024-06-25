@@ -40,7 +40,7 @@ let SheepTimer = trueRegularAbilityCD * 1000;
 let timerArray = [trueRegularAbilityCD * 1000];
 //timerArray = updateTimer(timer, timerArray);
 
-const MEME = new Sound({ source: "meme.ogg", volume: 1 });
+try { const MEME = new Sound({ source: "meme.ogg", volume: 1 })} catch {const MEME = null}
 
 
 //renders pings
@@ -131,7 +131,9 @@ data.autosave();
 
 
 register("renderOverlay", () => {
-    Renderer.drawString(`${data.text} ${data.timer.toString()} `, data.x, data.y, true);
+    if (settings.SheepTimer) {
+        Renderer.drawString(`${data.text} ${data.timer.toString()} `, data.x, data.y, true);
+    }
 });
 
 //called every tick
