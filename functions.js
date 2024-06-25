@@ -215,24 +215,6 @@ function updateTimer(timer, timerArray) {
     return timerArray;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function CountdownTitle(seconds) {
     for (let i = seconds; i >= 0; i--) {
         (function (i) {
@@ -309,7 +291,7 @@ function GoldorClassTerminals(Tank, Archer, Bers, Mage, Healer, f7p3section) {  
     switch (section) {
         case 1:
             (function () {
-                Tank && ChatLib.command("tell " + Tank + " x: 111, y: 113, z: 73 t: 1, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
+                Tank && ChatLib.command("tell " + Tank) && sendPingWaypoint(111,113,73,"1","INNERBOX", true);
                 setTimeout(() => {
                     Mage && ChatLib.command("tell " + Mage + " x: 111, y: 119, z: 79 t: 2, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
                 }, tellDelay);
@@ -387,26 +369,26 @@ function GoldorClassTerminals(Tank, Archer, Bers, Mage, Healer, f7p3section) {  
 
 }
 
+function fetchClassesFromTablist() {
+    tablist = TabList?.getNames()?.map(name => name?.removeFormatting());
+    let classes = []
+    for (let i = 0; i < tablist.length; i++) {
+        if (tablist[i].indexOf("(Mage") != -1 || tablist[i].indexOf("(Healer") != -1 || tablist[i].indexOf("(Tank") != -1 || tablist[i].indexOf("(Archer") != -1 || tablist[i].indexOf("(Berserk") != -1) {
+            classes.add({player: tablist[i].substring(tablist[i].indexOf("(")+1).trim().split(/\s+/)[0], class: tablist[i].substring(tablist[i].indexOf("]")+2).trim().split(/\s+/)[0]})
+        }
+    }
+    return classes;
+}
+
 
 //GoldorClassTerminals("TANKIBOIII", null, 0, "", undefined, 3);
+/*
+// reassigns the 
+function onWorldLoad() {
+    world = new WorldInstance();
+    //ChatLib.chat("Creating new World Instance.");
+}
+register("worldLoad", onWorldLoad);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-export { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB, MageCDR, EntityNBTData, updateTimer, GoldorClassTerminals };
+*/
+export { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB, MageCDR, EntityNBTData, updateTimer, GoldorClassTerminals, fetchClassesFromTablist };

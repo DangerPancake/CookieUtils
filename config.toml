@@ -25,6 +25,7 @@
 		color_picker = "255,0,0,255"
 		e = "hewwo"
 		"delete_ping_waypoints_after:" = 1000.0
+		mage_sheep_cooldown = true
 		"do_action!!!" = false
 		text = ""
 		default_ping_text = ""
