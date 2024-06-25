@@ -1,7 +1,7 @@
 import RenderLib from "../RenderLib/index.js";
 import settings from "./settings";
 import "./functions.js";
-import { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB, MageCDR, EntityNBTData, updateTimer, fetchClassesFromTablist } from "./functions.js";
+import { Vector, pseudoString, printAMessage, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB, MageCDR, EntityNBTData, updateTimer, fetchClassesFromTablist } from "./functions.js";
 
 //all variables are defined here in order to limit the chances of a memory leak occuring
 let testBlock = null;
@@ -36,12 +36,10 @@ let currentClass = null;
 let soloClass = null;
 
 import PogObject from "../PogData/index.js";
-let SheepTimer = trueRegularAbilityCD * 1000;
-let timerArray = [trueRegularAbilityCD * 1000];
-//timerArray = updateTimer(timer, timerArray);
-
-try { const MEME = new Sound({ source: "meme.ogg", volume: 1 })} catch {const MEME = null}
-
+let timerDisplay = null
+let timer = trueRegularAbilityCD * 1000
+let MEME = null
+try { MEME = new Sound({ source: "meme.ogg", volume: 1 })} catch (error) {MEME = null}
 
 //renders pings
 register('renderWorld', () => {
@@ -115,8 +113,7 @@ register("chat", (event) => {
 register("command", () => {
     ChatLib.chat("TESTING ZONEEEEE");
     // JUST THROW CODE HERE WE USE THIS AS DEBUGGING ZONE NOW
-    timerArray = updateTimer(SheepTimer, timerArray);
-}).setName("test");
+}).setName("testicle");
 
 
 
@@ -124,15 +121,13 @@ register("command", () => {
 const data = new PogObject("CookieUtils", {
     x: 200,
     y: 100,
-    timer: SheepTimer.toFixed(2).toString(),
-    text: "SHEEP TIMER:"
 });
 data.autosave();
 
 
 register("renderOverlay", () => {
-    if (settings.SheepTimer) {
-        Renderer.drawString(`${data.text} ${data.timer.toString()} `, data.x, data.y, true);
+    if (settings.mageSheep) {
+        Renderer.drawString(`Sheep Timer: ${timerDisplay} `, 200, 100, true);
     }
 });
 
@@ -148,29 +143,35 @@ register("tick", () => {
         }
         counter += 1;
     }
+    currentClass = "Mage"
+    //if we are doing the sheep cooldown stuff:
     if (Cooldown == false && getCurrentArea() == "Catacombs" && settings.mageSheep && currentClass == "Mage") {
+        //fetch sheep around us
         nearbySheep = GetEntitiesWithinAABB(SHEEP_CLASS, 5);
         if (nearbySheep[0] != undefined) {
             Cooldown = true;
-
-            timerArray = updateTimer(SheepTimer, timerArray);
-            //ChatLib.chat(EntityNBTData(nearbySheep[0]));
+            //set the countdown to the max
+            timer = trueRegularAbilityCD*1000
+            updateSheepTimer()
+            //after the countdown is over set cooldown to true
             setTimeout(() => {
                 Cooldown = false;
-                timerArray = [trueRegularAbilityCD*1000];
             }, trueRegularAbilityCD * 1000); 
         }
     }
-    if (Math.floor(timerArray[timerArray.length - 1]) == Math.floor(trueRegularAbilityCD) * 1000) {
-        data.timer = "&2READY!!!&r";
-        SheepTimer = timerArray[timerArray.length - 1];
-    } else {
-        data.timer = SheepTimer.toFixed(2).toString();
-        SheepTimer = timerArray[timerArray.length - 1];
+    if (timer == 0 || timer == null || timerDisplay == "0.00") {
+        timerDisplay = "&2READY!!!&r"
     }
 });
 
-
+function updateSheepTimer() {
+    // Format timer value as a float
+    timerDisplay = parseFloat(`${Math.floor(timer / 1000)}.${Math.floor((timer % 1000) / 100)}${Math.floor((timer % 100) / 10)}`).toFixed(2).toString();
+    timer -= 10
+    if (timer >= 0) {
+        setTimeout(updateSheepTimer, 10); // Call updateTime after 10 milliseconds
+    }
+}
 
 //opens up the cookie utils GUI
 register("command", (user) => {
@@ -283,7 +284,10 @@ register("chat", (player, x, y, z, text, type, event) => {
             }
         }
         ChatLib.chat("Ping fetched from " + player);
-        MEME.play();
+        if (MEME != null) {
+            MEME.play();
+        }
+        
     }
 }).setCriteria("${player}: x: ${x}, y: ${y}, z: ${z} t: ${text}, t:${type}. /cu").setContains();
 

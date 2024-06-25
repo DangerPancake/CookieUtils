@@ -186,7 +186,7 @@ function updateTimer(timer, timerArray) {
         if (timerArray.length > 5) {
             timerArray.shift();
         }
-
+        print(timerArray[timerArray.length -1])
         // Push current timer value to array
         timerArray.push(formattedTimer);
 
@@ -237,7 +237,6 @@ function pseudoString(length) {
     return string;
 }
 
-
 function printAMessage(message, addString) {
     if (addString) {
         let r = message + " " + pseudoString(11)
@@ -246,23 +245,6 @@ function printAMessage(message, addString) {
     } else {
         ChatLib.say(message);
     }
-}
-
-/**
- * Plays a sound and sets cooldown
- * 
- * @param {Sound} sound - A sound ogg file from constants.js 
- * @param {Number} cd - Cooldown caused by sound play.
- */
-let soundCD = false;
-function playSound(sound, cd) {
-    if (soundCD === true) return;
-
-    sound.play();
-    soundCD = true;
-    setTimeout(() => {
-        soundCD = false;
-    }, cd);
 }
 
 function getCurrentArea() {
@@ -277,10 +259,6 @@ function getCurrentArea() {
 function sendPingWaypoint(x, y, z, t, ty, p) {
     printAMessage("x: " + x + ", y: " + y + ", z: " + z + " t: " + t + ", t:" + ty + ". /cu", p)
 }
-
-
-
-
 
 // GOLDOR CLASS TERMINALS
 function GoldorClassTerminals(Tank, Archer, Bers, Mage, Healer, f7p3section) {  // basically self explanatory but: name of the people assigned the class term        f7p3section: what section of the p3 you are in (integer)
@@ -391,4 +369,4 @@ function onWorldLoad() {
 register("worldLoad", onWorldLoad);
 
 */
-export { Vector, pseudoString, printAMessage, playSound, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB, MageCDR, EntityNBTData, updateTimer, GoldorClassTerminals, fetchClassesFromTablist };
+export { Vector, pseudoString, printAMessage, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB, MageCDR, EntityNBTData, updateTimer, GoldorClassTerminals, fetchClassesFromTablist };
