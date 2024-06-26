@@ -256,90 +256,88 @@ function getCurrentArea() {
     return temp;
 }
 
-function sendPingWaypoint(x, y, z, t, ty, p) {
-    printAMessage("x: " + x + ", y: " + y + ", z: " + z + " t: " + t + ", t:" + ty + ". /cu", p)
+function sendPingWaypoint(x, y, z, t, ty, p, prefix = null) {
+    if (prefix) {
+        printAMessage(prefix + "x: " + x + ", y: " + y + ", z: " + z + " t: " + t + ", t:" + ty + ". /cu", p);
+    } else {
+        printAMessage("x: " + x + ", y: " + y + ", z: " + z + " t: " + t + ", t:" + ty + ". /cu", p);
+    }
 }
 
 // GOLDOR CLASS TERMINALS
 function GoldorClassTerminals(Tank, Archer, Bers, Mage, Healer, f7p3section) {  // basically self explanatory but: name of the people assigned the class term        f7p3section: what section of the p3 you are in (integer)
     let section = f7p3section;
-    let pseudoStringLength = 10;
     let tellDelay = 700; //in ms
 
     switch (section) {
         case 1:
-            (function () {
-                Tank && ChatLib.command("tell " + Tank) && sendPingWaypoint(111,113,73,"1","INNERBOX", true);
-                setTimeout(() => {
-                    Mage && ChatLib.command("tell " + Mage + " x: 111, y: 119, z: 79 t: 2, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
-                }, tellDelay);
-                setTimeout(() => {
-                    Bers && ChatLib.command("tell " + Bers + " x: 89, y: 112, z: 92 t: 3, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
-                }, tellDelay*2);
-                setTimeout(() => {
-                    Archer && ChatLib.command("tell " + Archer + " x: 89, y: 122, z: 101 t: 4, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
-                }, tellDelay*3);
-                setTimeout(() => {
-                    Healer && ChatLib.command("tell " + Healer + "  x: 110, y: 119, z: 93 t:device, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
-                }, tellDelay*4);
-                ChatLib.chat("&2section " + section + "&r");
-            })();
+            Tank && sendPingWaypoint(111, 113, 73, "1", "INNERBOX", true, "/tell " + Tank + " ");
+            setTimeout(() => {
+                Mage && sendPingWaypoint(111, 119, 79, "2", "INNERBOX", true, "/tell " + Mage + " ");
+            }, tellDelay);
+            setTimeout(() => {
+                Bers && sendPingWaypoint(89, 112, 92, "3", "INNERBOX", true, "/tell " + Bers + " ");
+            }, tellDelay * 2);
+            setTimeout(() => {
+                Archer && sendPingWaypoint(89, 122, 101, "4", "INNERBOX", true, "/tell " + Archer + " ");
+            }, tellDelay * 4);
+            setTimeout(() => {
+                Healer && sendPingWaypoint(110, 119, 93, "device", "INNERBOX", true, "/tell " + Healer + " ");
+            }, tellDelay * 3);
+            ChatLib.chat("&2section " + section + "&r");
             break;
-        case 2:
-            (function () {
-                Tank && ChatLib.command("tell " + Tank + " x: 68, y: 109, z: 121 t: 1, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
-                setTimeout(() => {
-                    Mage && ChatLib.command("tell " + Mage + " x: 59, y: 120, z: 122 t: 2, t:BOX. /cu " + pseudoString(pseudoStringLength));
-                }, tellDelay);
-                setTimeout(() => {
-                    Bers && ChatLib.command("tell " + Bers + " x: 47, y: 109, z: 121 t: 3, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
-                }, tellDelay*2);
-                setTimeout(() => {
-                    Archer && ChatLib.command("tell " + Archer + " x: 39, y: 108, z: 143 t: 4, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
-                }, tellDelay*3);
-                setTimeout(() => {
-                    Healer && ChatLib.command("tell " + Healer + " x: 60, y: 131, z: 141 t:device, t:BOX. /cu " + pseudoString(pseudoStringLength));
-                }, tellDelay*4);
-                ChatLib.chat("&2section " + section + "&r");
-            }) ();
+
+        case 2: 
+            Tank && sendPingWaypoint(68, 109, 121, "1", "INNERBOX", true, "/tell " + Tank + " ");
+            setTimeout(() => {
+                Mage && sendPingWaypoint(59, 120, 122, "2", "INNERBOX", true, "/tell " + Mage + " ");
+            }, tellDelay*2);
+            setTimeout(() => {
+                Bers && sendPingWaypoint(47, 109, 121, "3", "INNERBOX", true, "/tell " + Bers + " ");
+            }, tellDelay * 3);
+            setTimeout(() => {
+                Archer && sendPingWaypoint(39, 108, 143, "4", "INNERBOX", true, "/tell " + Archer + " ");
+            }, tellDelay * 4);
+            setTimeout(() => {
+                Healer && sendPingWaypoint(60, 131, 141, "device", "INNERBOX", true, "/tell " + Healer + " ");
+            }, tellDelay);
+            ChatLib.chat("&2section " + section + "&r");
             break;
-            
+        
         case 3:
-            (function () {
-                Tank && ChatLib.command("tell " + Tank + " x: -3, y: 109, z: 112 t: 1, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
-                setTimeout(() => {
-                    Mage && ChatLib.command("tell " + Mage + " x: -3, y: 119, z: 93 t: 2, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
-                }, tellDelay);
-                setTimeout(() => {
-                    Bers && ChatLib.command("tell " + Bers + " x: 19, y: 123, z: 93 t: 3, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
-                }, tellDelay*2);
-                setTimeout(() => {
-                    Archer && ChatLib.command("tell " + Archer + " x: -3, y: 109, z: 77 t: 4, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
-                }, tellDelay*3);
-                setTimeout(() => {
-                    Healer && ChatLib.command("tell " + Healer + " x: -1, y: 119, z: 77 t: device, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
-                }, tellDelay*4);
-                ChatLib.chat("&2section " + section + "&r");
-            }) ();
+            Tank && sendPingWaypoint(-3, 109, 112, "1", "INNERBOX", true, "/tell " + Tank + " ");
+            setTimeout(() => {
+                Mage && sendPingWaypoint(-3, 119, 93, "2", "INNERBOX", true, "/tell " + Mage + " ");
+            }, tellDelay);
+            setTimeout(() => {
+                Bers && sendPingWaypoint(19, 123, 93, "3", "INNERBOX", true, "/tell " + Bers + " ");
+            }, tellDelay * 2);
+            setTimeout(() => {
+                Archer && sendPingWaypoint(-3, 109, 77, "4", "INNERBOX", true, "/tell " + Archer + " ");
+            }, tellDelay * 3);
+            setTimeout(() => {
+                Healer && sendPingWaypoint(-1, 119, 77, "device", "INNERBOX", true, "/tell " + Healer + " ");
+            }, tellDelay * 4);
+            ChatLib.chat("&2section " + section + "&r");
             break;
-        case 4:
-            (function () {
-                Tank && ChatLib.command("tell " + Tank + " x: 41, y: 109, z: 29 t: 1, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
-                setTimeout(() => {
-                    Mage && ChatLib.command("tell " + Mage + " x: 44, y: 121, z: 29 t: 2, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
-                }, tellDelay);
-                setTimeout(() => {
-                    Bers && ChatLib.command("tell " + Bers + " x: 67, y: 109, z: 29 t: 3, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
-                }, tellDelay*2);
-                setTimeout(() => {
-                    Archer && ChatLib.command("tell " + Archer + " x: 72, y: 115, z: 48 t: 4, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
-                }, tellDelay*3);
-                setTimeout(() => {
-                    Healer && ChatLib.command("tell " + Healer + " x: 63, y: 127, z: 35 t: device, t:INNERBOX. /cu " + pseudoString(pseudoStringLength));
-                }, tellDelay*4);
-                ChatLib.chat("&2section " + section + "&r");
-            })();
+
+        case 4: 
+            Tank && sendPingWaypoint(41, 109, 29, "1", "INNERBOX", true, "/tell " + Tank + " ");
+            setTimeout(() => {
+                Mage && sendPingWaypoint(44, 121, 29, "2", "INNERBOX", true, "/tell " + Mage + " ");
+            }, tellDelay);
+            setTimeout(() => {
+                Bers && sendPingWaypoint(67, 109, 29, "3", "INNERBOX", true, "/tell " + Bers + " ");
+            }, tellDelay * 2);
+            setTimeout(() => {
+                Archer && sendPingWaypoint(72, 115, 48, "4", "INNERBOX", true, "/tell " + Archer + " ");
+            }, tellDelay * 4);
+            setTimeout(() => {
+                Healer && sendPingWaypoint(63, 127, 35, "device", "INNERBOX", true, "/tell " + Healer + " ");
+            }, tellDelay * 3);
+            ChatLib.chat("&2section " + section + "&r");
             break;
+
         default:
             ChatLib.chat("unknown section: " + section);
     }

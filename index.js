@@ -1,7 +1,7 @@
 import RenderLib from "../RenderLib/index.js";
 import settings from "./settings";
 import "./functions.js";
-import { Vector, pseudoString, printAMessage, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB, MageCDR, EntityNBTData, updateTimer, fetchClassesFromTablist } from "./functions.js";
+import { Vector, pseudoString, printAMessage, CountdownTitle, getCurrentArea, sendPingWaypoint, WorldInstance, GetEntitiesWithinAABB, MageCDR, EntityNBTData, updateTimer, fetchClassesFromTablist, GoldorClassTerminals } from "./functions.js";
 
 //all variables are defined here in order to limit the chances of a memory leak occuring
 let testBlock = null;
@@ -23,9 +23,6 @@ let phase = true;
 
 let world = null;
 const SHEEP_CLASS = Java.type('net.minecraft.entity.passive.EntitySheep').class;
-const SKELETON_CLASS = Java.type('net.minecraft.entity.monster.EntitySkeleton').class;
-const arrow = Java.type("net.minecraft.entity.projectile.EntityArrow");
-const EntityClass = Java.type('net.minecraft.entity.Entity').class;
 let nearbySheep = undefined;
 let Cooldown = false;
 let Mage_Level = 41;
@@ -39,7 +36,7 @@ import PogObject from "../PogData/index.js";
 let timerDisplay = null
 let timer = trueRegularAbilityCD * 1000
 let MEME = null
-try { MEME = new Sound({ source: "meme.ogg", volume: 1 })} catch (error) {MEME = null}
+// try { MEME = new Sound({ source: "meme.ogg", volume: 1 })} catch (error) {MEME = null}
 
 //renders pings
 register('renderWorld', () => {
@@ -72,22 +69,19 @@ register('renderWorld', () => {
 // m7 p5 dragon lb waypoints
 register("chat", (event) => {
     if (settings.m7Drags && getCurrentArea() == "Catacombs") {
-        ChatLib.command("chat p");
-        (function () {
-            sendPingWaypoint(26, 18, 92, "GREEN", " ", settings.addText);
-            setTimeout(() => {
-                sendPingWaypoint(82, 18, 96, "BLUE", " ", settings.addText);
-            }, 200);
-            setTimeout(() => {
-                sendPingWaypoint(83, 18, 57, "ORANGE", " ", settings.addText);
-            }, 400);
-            setTimeout(() => {
-                sendPingWaypoint(56, 20, 124, "PURPLE", " ", settings.addText);
-            }, 600);
-            setTimeout(() => {
-                sendPingWaypoint(27, 18, 56, "RED", " ", settings.addText);
-            }, 800);
-        })();
+        sendPingWaypoint(26, 18, 92, "GREEN", " ", settings.addText, "/pc ");
+        setTimeout(() => {
+            sendPingWaypoint(82, 18, 96, "BLUE", " ", settings.addText, "/pc ");
+        }, 200);
+        setTimeout(() => {
+            sendPingWaypoint(83, 18, 57, "ORANGE", " ", settings.addText, "/pc ");
+        }, 400);
+        setTimeout(() => {
+            sendPingWaypoint(56, 20, 124, "PURPLE", " ", settings.addText, "/pc ");
+        }, 600);
+        setTimeout(() => {
+            sendPingWaypoint(27, 18, 56, "RED", " ", settings.addText, "/pc ");
+        }, 800);
     }
 }).setCriteria("[BOSS] Wither King: We will decide it all, here, now.").setContains();
 
@@ -113,7 +107,8 @@ register("chat", (event) => {
 register("command", () => {
     ChatLib.chat("TESTING ZONEEEEE");
     // JUST THROW CODE HERE WE USE THIS AS DEBUGGING ZONE NOW
-}).setName("testicle");
+    GoldorClassTerminals("Quektos", "Makali", "Makali", "Makali", "Makali", 1);
+}).setName("test");
 
 
 
@@ -285,7 +280,7 @@ register("chat", (player, x, y, z, text, type, event) => {
         }
         ChatLib.chat("Ping fetched from " + player);
         if (MEME != null) {
-            MEME.play();
+            //MEME.play();
         }
         
     }
