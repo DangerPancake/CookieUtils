@@ -6,30 +6,41 @@
 		limit_to_one_ping_of_a_text = true
 		green = 196
 		default_ping_range = 0
-		add_random_string = true
+		"term4/archer" = ""
+		add_random_string = false
+		"term1/tank" = ""
 		change_ping_color = false
 		ping_color = "255,78,134,139"
 		red = 0
 		limit_to_one_ping_per_player = false
 		blue = 48
+		"term2/mage" = ""
 		"delete_ping_waypoints_after:" = 0
 		mage_sheep_cooldown = true
 		alpha = 2
+		"device/healer" = ""
 		selector = 0
+		"term3/berserker" = ""
 		percent_slider = 0.0
 		default_ping_text = ""
 		accept_pings = true
 
 	[general.dungeons]
-		password = ""
+		"term4/archer" = ""
 		color_picker = "255,0,0,255"
 		e = "hewwo"
-		"delete_ping_waypoints_after:" = 1000.0
-		mage_sheep_cooldown = true
 		"do_action!!!" = false
+		"term1/tank" = ""
+		m7_dragons_autoping = false
+		password = ""
+		"term2/mage" = ""
+		"delete_ping_waypoints_after:" = 1000.0
+		mage_sheep_cooldown = false
+		"device/healer" = ""
+		"term3/berserker" = ""
 		text = ""
+		p3_terms = true
 		default_ping_text = ""
-		m7_dragons_autoping = true
 
 	[general.eeeeee]
 		selector = 0

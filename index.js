@@ -66,6 +66,71 @@ register('renderWorld', () => {
     }
 });
 
+
+// m7 p3 class assigned terminals
+let GoldorClassTermsRegister = null;
+let section = 0;
+
+let GoldorEntryRegister = register("chat", (event) => {
+    
+    (function () { // disables GoldorClassTermsRegister if bossfight takes too long. Assumption: failed run
+        setTimeout(() => {
+            try {
+                GoldorClassTermsRegister.unregister();
+            } catch (err) { }
+        }, (5*60*1000)); // disables after 5*60*1000 ms => 5Minutes
+    })();
+
+
+
+    section = 1;
+    GoldorClassTerminals(settings.f7p3term1, settings.f7p3term2, settings.f7p3term3, settings.f7p3term4, settings.f7p3dev, section);
+
+
+
+    GoldorClassTermsRegister = register("chat", (player, action, object, count, endcount, event) => {
+        //ChatLib.chat(`Player ${player} ${action} the object ${object}. Count is: ${count} out of ${endcount}`);
+        let ParsedCount = parseInt(count, 10);
+        let ParsedEndcount = parseInt(endcount, 10);
+        if (ParsedCount === ParsedEndcount) {
+            section++;
+            GoldorClassTerminals(settings.f7p3term1, settings.f7p3term2, settings.f7p3term3, settings.f7p3term4, settings.f7p3dev, section);
+            //ChatLib.chat(`Next section reached! ${count}/${endcount} This will be section ${section} now.`);
+            if (section === 5) { // reset values since p3 is completed now
+                //ChatLib.chat("P3 successfully completed! Awaiting Necron now.");
+                section = 0;
+                GoldorClassTermsRegister.unregister();
+                GoldorClassTermsRegister = null;
+            }
+        }
+    }).setCriteria("${player} ${action} a ${object}! (${count}/${endcount}").setContains();
+
+    
+    
+
+}).setCriteria("[BOSS] Storm: At least my son died by your hands.").setContains();
+
+//GoldorClassTermsRegister.unregister();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // m7 p5 dragon lb waypoints
 register("chat", (event) => {
     if (settings.m7Drags && getCurrentArea() == "Catacombs") {
@@ -107,7 +172,7 @@ register("chat", (event) => {
 register("command", () => {
     ChatLib.chat("TESTING ZONEEEEE");
     // JUST THROW CODE HERE WE USE THIS AS DEBUGGING ZONE NOW
-    GoldorClassTerminals("Quektos", "Makali", "Makali", "Makali", "Makali", 1);
+    GoldorClassTerminals(settings.f7p3term1, settings.f7p3term2, settings.f7p3term3, settings.f7p3term4, settings.f7p3dev, 1);
 }).setName("test");
 
 

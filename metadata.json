@@ -4,5 +4,5 @@
   "description": "Our first module!",
   "version": "1.0.0",
   "entry": "index.js",
-  "requires": [ "RenderLib", "RenderLibV2", "Vigilance" ]
+  "requires": [ "RenderLib", "RenderLibV2", "Vigilance", "PogData" ]
 }

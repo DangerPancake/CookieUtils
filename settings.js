@@ -159,6 +159,61 @@ class Settings {
     })
     mageSheep = false;
 
+
+
+
+    ///// P3 TERMS /////
+    @SwitchProperty({
+        name: 'p3 terms',
+        description: 'reminds your team mates what term/device theyre supposed to cover by whispering them a waypoint',
+        category: 'General',
+        subcategory: 'Dungeons',
+    })
+    f7p3terms = false;
+
+    @TextProperty({
+        name: 'Term1/Tank',
+        description: 'Whoever covers the 1st Term (usually the Tank)',
+        category: 'General',
+        subcategory: 'Dungeons',
+    })
+    f7p3term1 = '';
+
+    @TextProperty({
+        name: 'Term2/Mage',
+        description: 'Whoever covers the 2nd Term (usually the Mage)',
+        category: 'General',
+        subcategory: 'Dungeons',
+    })
+    f7p3term2 = '';
+
+    @TextProperty({
+        name: 'Term3/Berserker',
+        description: 'Whoever covers the 3rd Term (usually the Berserker)',
+        category: 'General',
+        subcategory: 'Dungeons',
+    })
+    f7p3term3 = '';
+
+    @TextProperty({
+        name: 'Term4/Archer',
+        description: 'Whoever covers the 4th Term (usually the Archer)',
+        category: 'General',
+        subcategory: 'Dungeons',
+    })
+    f7p3term4 = '';
+
+    @TextProperty({
+        name: 'Device/Healer',
+        description: 'Whoever covers the Device (usually the Healer)',
+        category: 'General',
+        subcategory: 'Dungeons',
+    })
+    f7p3dev = '';
+
+
+
+
     @SwitchProperty({
         name: 'M7 Dragons Autoping',
         description: 'Automatically sends a ping for where to shoot Last Breath during M7 P5',
@@ -180,6 +235,11 @@ class Settings {
         this.addDependency("Red", "Change Ping Color")
         this.addDependency("Green", "Change Ping Color")
         this.addDependency("Blue", "Change Ping Color")
+        this.addDependency("Term1/Tank", "p3 terms")
+        this.addDependency("Term2/Mage", "p3 terms")
+        this.addDependency("Term3/Berserker", "p3 terms")
+        this.addDependency("Term4/Archer", "p3 terms")
+        this.addDependency("Device/Healer", "p3 terms")
         this.setCategoryDescription('General', 'CookieUtils Settings');
         this.setSubcategoryDescription('General', 'Dungeons', 'Dungeons Features');
     }

@@ -265,7 +265,7 @@ function sendPingWaypoint(x, y, z, t, ty, p, prefix = null) {
 }
 
 // GOLDOR CLASS TERMINALS
-function GoldorClassTerminals(Tank, Archer, Bers, Mage, Healer, f7p3section) {  // basically self explanatory but: name of the people assigned the class term        f7p3section: what section of the p3 you are in (integer)
+function GoldorClassTerminals(Tank, Mage, Bers, Archer, Healer, f7p3section) {  // basically self explanatory but: name of the people assigned the class term        f7p3section: what section of the p3 you are in (integer)
     let section = f7p3section;
     let tellDelay = 700; //in ms
 
