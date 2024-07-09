@@ -37,6 +37,7 @@ let timerDisplay = null
 let timer = trueRegularAbilityCD * 1000
 let MEME = null
 // try { MEME = new Sound({ source: "meme.ogg", volume: 1 })} catch (error) {MEME = null}
+const GHAST_CLASS = Java.type("net.minecraft.entity.monster.EntityGhast").class;
 
 //renders pings
 register('renderWorld', () => {
@@ -138,7 +139,6 @@ export default function RegisterSwitch() {
 
 
 
-
 // highlight players
 let highlightedPlayers = []
 let highlightedPlayersSettings = [ // also add ping later:      fun getPing(): Int
@@ -225,21 +225,6 @@ register('renderWorld', () => {
     }
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -338,6 +323,15 @@ register("tick", () => {
     if (timer == 0 || timer == null || timerDisplay == "0.00") {
         timerDisplay = "&2READY!!!&r"
     }
+    if (settings.dropshipAlert) {
+        const dropships = World.getAllEntitiesOfType(GHAST_CLASS).find(ghast => {
+            distance = Math.hypot(ghast.getX() + 101, ghast.getZ() + 105);
+            return distance < 20 && distance > 10;
+        });
+
+        if (dropships !== undefined) setTitle(`${RED + BOLD}ART IS AN EXPLOSION!`, "", 0, 50, 5, 71);
+    }
+    
 });
 
 function updateSheepTimer() {

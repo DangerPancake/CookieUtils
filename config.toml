@@ -33,9 +33,10 @@
 		"term1/tank" = ""
 		m7_dragons_autoping = true
 		password = ""
+		kuudra_dropship_alert = true
 		"term2/mage" = ""
 		"delete_ping_waypoints_after:" = 1000.0
-		mage_sheep_cooldown = false
+		mage_sheep_cooldown = true
 		"device/healer" = ""
 		"term3/berserker" = ""
 		text = ""

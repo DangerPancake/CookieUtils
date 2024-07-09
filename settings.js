@@ -233,6 +233,14 @@ class Settings {
     })
     selfPing = true;
 
+    @SwitchProperty({
+        name: 'Kuudra Dropship Alert',
+        description: 'title',
+        category: 'General',
+        subcategory: 'Dungeons',
+    })
+    dropshipAlert = true;
+
     constructor() {
         this.initialize(this);
         this.addDependency("Red", "Change Ping Color")
