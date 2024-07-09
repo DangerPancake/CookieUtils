@@ -138,34 +138,6 @@ function EntityNBTData(ENTITYCLASS) {
 }
 
 
-/*
-    function isSheepWithinRange() {
-        let boundingBox = new AxisAlignedBB(
-            Player.getX() - 1, Player.getY() - 1, Player.getZ() - 1,
-            Player.getX() + 1, Player.getY() + 1, Player.getZ() + 1
-        );
-
-        let minecraft = Minecraft.func_71410_x();
-        let player = minecraft.field_71439_g;
-        let world = player.field_70170_p;
-        let sheepList = world.func_72872_a(EntitySheep.class, boundingBox);
-
-        try {
-            return sheepList[0];
-        }
-        catch (err) {
-            return null;
-        }
-    }
-
-
-    let isNearby = isSheepWithinRange();
-    ChatLib.chat(isNearby);
-
-
-*/
-
-
 
 // Function to update the timer
 function updateTimer(timer, timerArray) {
@@ -227,15 +199,21 @@ function CountdownTitle(seconds) {
 
 function pseudoString(length) {
     let string = "@";
+    let ranges = [
+        { min: 48, max: 57 }, // 0-9
+        { min: 65, max: 90 }, // A-Z
+        { min: 97, max: 122 } // a-z
+    ];
+    
     for (let i = 0; i < length; i++) {
-        let random;
-        do {
-            random = Math.floor(Math.random() * 94) + 33; // Random value between 33 and 126 (inclusive)
-        } while (random === 46); // If the random value is 46 (.), re-roll
+        let range = ranges[Math.floor(Math.random() * ranges.length)];
+        let random = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
         string += String.fromCharCode(random); // Append the character
     }
+    
     return string;
 }
+
 
 function printAMessage(message, addString) {
     if (addString) {
@@ -271,7 +249,7 @@ function GoldorClassTerminals(Tank, Mage, Bers, Archer, Healer, f7p3section) {  
 
     switch (section) {
         case 1:
-            Tank && sendPingWaypoint(111, 113, 73, "1", "INNERBOX", true, "/tell " + Tank + " ");
+            Tank && sendPingWaypoint(111, 113, 73, "1", "INNERBOX", true, " " + Tank + " ");
             setTimeout(() => {
                 Mage && sendPingWaypoint(111, 119, 79, "2", "INNERBOX", true, "/tell " + Mage + " ");
             }, tellDelay);
@@ -284,7 +262,7 @@ function GoldorClassTerminals(Tank, Mage, Bers, Archer, Healer, f7p3section) {  
             setTimeout(() => {
                 Healer && sendPingWaypoint(110, 119, 93, "device", "INNERBOX", true, "/tell " + Healer + " ");
             }, tellDelay * 3);
-            ChatLib.chat("&2section " + section + "&r");
+            //ChatLib.chat("&2section " + section + "&r");
             break;
 
         case 2: 
@@ -301,7 +279,7 @@ function GoldorClassTerminals(Tank, Mage, Bers, Archer, Healer, f7p3section) {  
             setTimeout(() => {
                 Healer && sendPingWaypoint(60, 131, 141, "device", "INNERBOX", true, "/tell " + Healer + " ");
             }, tellDelay);
-            ChatLib.chat("&2section " + section + "&r");
+            //ChatLib.chat("&2section " + section + "&r");
             break;
         
         case 3:
@@ -318,7 +296,7 @@ function GoldorClassTerminals(Tank, Mage, Bers, Archer, Healer, f7p3section) {  
             setTimeout(() => {
                 Healer && sendPingWaypoint(-1, 119, 77, "device", "INNERBOX", true, "/tell " + Healer + " ");
             }, tellDelay * 4);
-            ChatLib.chat("&2section " + section + "&r");
+            //ChatLib.chat("&2section " + section + "&r");
             break;
 
         case 4: 
@@ -335,7 +313,7 @@ function GoldorClassTerminals(Tank, Mage, Bers, Archer, Healer, f7p3section) {  
             setTimeout(() => {
                 Healer && sendPingWaypoint(63, 127, 35, "device", "INNERBOX", true, "/tell " + Healer + " ");
             }, tellDelay * 3);
-            ChatLib.chat("&2section " + section + "&r");
+            //ChatLib.chat("&2section " + section + "&r");
             break;
 
         default:

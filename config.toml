@@ -31,7 +31,7 @@
 		e = "hewwo"
 		"do_action!!!" = false
 		"term1/tank" = ""
-		m7_dragons_autoping = false
+		m7_dragons_autoping = true
 		password = ""
 		"term2/mage" = ""
 		"delete_ping_waypoints_after:" = 1000.0
@@ -39,7 +39,7 @@
 		"device/healer" = ""
 		"term3/berserker" = ""
 		text = ""
-		p3_terms = true
+		p3_terms = false
 		default_ping_text = ""
 
 	[general.eeeeee]

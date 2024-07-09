@@ -71,15 +71,21 @@ register('renderWorld', () => {
 let GoldorClassTermsRegister = null;
 let section = 0;
 
-let GoldorEntryRegister = register("chat", (event) => {
+export let GoldorEntryRegister = register("chat", (event) => {
     
     (function () { // disables GoldorClassTermsRegister if bossfight takes too long. Assumption: failed run
         setTimeout(() => {
             try {
+                section = 0;
                 GoldorClassTermsRegister.unregister();
+                GoldorClassTermsRegister = null;
             } catch (err) { }
         }, (5*60*1000)); // disables after 5*60*1000 ms => 5Minutes
     })();
+
+
+    
+
 
 
 
@@ -103,14 +109,124 @@ let GoldorEntryRegister = register("chat", (event) => {
                 GoldorClassTermsRegister = null;
             }
         }
-    }).setCriteria("${player} ${action} a ${object}! (${count}/${endcount}").setContains();
+
+
+
+    }).setCriteria("${player} ${action} a ${object}! (${count}/${endcount}").setContains(); // example: Hello activated a Terminal! (7/7)
 
     
     
 
 }).setCriteria("[BOSS] Storm: At least my son died by your hands.").setContains();
 
-//GoldorClassTermsRegister.unregister();
+// TURNING THE REGISTER ON AND OFF
+if (settings.f7p3terms) {
+    GoldorEntryRegister.unregister();
+}
+
+/*
+export default function RegisterSwitch() {
+    if (settings.f7p3terms) {
+        GoldorEntryRegister.register();
+        ChatLib.chat("Registering " + GoldorEntryRegister);
+    } else {
+        GoldorEntryRegister.unregister();
+        ChatLib.chat("Unregistering " + GoldorEntryRegister);
+    }
+}
+*/
+
+
+
+
+// highlight players
+let highlightedPlayers = []
+let highlightedPlayersSettings = [ // also add ping later:      fun getPing(): Int
+    ['Health', "false"],
+    ['Ping', "false"],
+    ['Name', "false"]
+];
+
+register("command", (...args) => {
+    if (args[0] == "highlight" || args[0] == "hl") {
+        if (!args[1] || args[1].length >= 3) {
+            highlightedPlayers.push(args[1]);
+            ChatLib.chat("Player " + args[1] + " will from now on be highlighted");
+        } else {
+            ChatLib.chat("\"" + args[1] + "\"" + " is not a valid player.");
+            return;
+        }
+    } else if (args[0] == "show" || args[0] == "s") {
+        if (!args[1]) {
+            ChatLib.chat("---------------------------------------------");
+            ChatLib.chat("/hlp show <Name/Ping/Health> <false/true>");
+            highlightedPlayersSettings.forEach((array) => ChatLib.chat(array[0] + ": " + array[1]));
+            ChatLib.chat("---------------------------------------------");
+
+        } else if (args[1] == "Name" || args[1] == "Ping" || args[1] == "Health") {
+            let statement = args[2] || "true"; // if args[2] is a falsy statement it just sets it to true
+            if (statement === "true" || statement === "false") {
+
+                let settingsMap = new Map(highlightedPlayersSettings);
+                settingsMap.set(args[1], statement);
+                highlightedPlayersSettings = Array.from(settingsMap);
+
+                ChatLib.chat("Setting " + "\"" + args[1] + "\"" + " set to " + statement);
+            } else {
+                ChatLib.chat(`Cannot set \"${args[1]}\" to \"${args[2]}\".`);
+                return;
+            }
+            
+        } else {
+            ChatLib.chat("Unknown Setting " + "\"" + args[1] + "\"" + ".");
+            return;
+        }
+
+    }
+
+
+}).setName("highlightplayer").setAliases("hlp");
+
+
+
+register('renderWorld', () => {
+
+    for (let i = 0; i < highlightedPlayers.length; i++) {
+        let player = null;
+        try {
+            player = World.getPlayerByName(highlightedPlayers[i]);
+        } catch (e) { }
+        if (player == null) {
+            return;
+        }
+        
+        RenderLib.drawEspBox(player.getRenderX(), player.getRenderY(), player.getRenderZ(), 1, 2, 0, 0, 1, 1, 0.5);
+
+        highlightedPlayersSettings.forEach((array) => {
+            switch (array[0]) {
+                case "Health":
+                    if (array[1] == "true") {
+                        Tessellator.drawString(`${player.getHP()}`, player.getRenderX(), player.getRenderY() + 1, player.getRenderZ());
+                    }
+                    break;
+                case "Ping":
+                    if (array[1] == "true") {
+                        Tessellator.drawString(`${player.getPing()}`, player.getRenderX(), player.getRenderY() + 0.5, player.getRenderZ());
+                    }
+                    break;
+                case "Name":
+                    if (array[1] == "true") {
+                        Tessellator.drawString(`${player.getName()}`, player.getRenderX(), player.getRenderY() + 1.5, player.getRenderZ());
+                    }
+                    break;
+            }
+        })
+        //Tessellator.drawString(highlightedPlayers[i], player.getRenderX(), player.getRenderY() + 1.5, player.getRenderZ());
+    }
+
+});
+
+
 
 
 
@@ -137,16 +253,16 @@ register("chat", (event) => {
         sendPingWaypoint(26, 18, 92, "GREEN", " ", settings.addText, "/pc ");
         setTimeout(() => {
             sendPingWaypoint(82, 18, 96, "BLUE", " ", settings.addText, "/pc ");
-        }, 200);
-        setTimeout(() => {
-            sendPingWaypoint(83, 18, 57, "ORANGE", " ", settings.addText, "/pc ");
         }, 400);
         setTimeout(() => {
+            sendPingWaypoint(83, 18, 57, "ORANGE", " ", settings.addText, "/pc ");
+        }, 800);
+        setTimeout(() => {
             sendPingWaypoint(56, 20, 124, "PURPLE", " ", settings.addText, "/pc ");
-        }, 600);
+        }, 1200);
         setTimeout(() => {
             sendPingWaypoint(27, 18, 56, "RED", " ", settings.addText, "/pc ");
-        }, 800);
+        }, 1600);
     }
 }).setCriteria("[BOSS] Wither King: We will decide it all, here, now.").setContains();
 
@@ -172,7 +288,7 @@ register("chat", (event) => {
 register("command", () => {
     ChatLib.chat("TESTING ZONEEEEE");
     // JUST THROW CODE HERE WE USE THIS AS DEBUGGING ZONE NOW
-    GoldorClassTerminals(settings.f7p3term1, settings.f7p3term2, settings.f7p3term3, settings.f7p3term4, settings.f7p3dev, 1);
+    RegisterSwitch(GoldorEntryRegister, false);
 }).setName("test");
 
 

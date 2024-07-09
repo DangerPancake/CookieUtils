@@ -11,6 +11,9 @@ import {
     Color
 } from '../../modules/Vigilance/index';
 
+//import { RegisterSwitch } from "./index.js";
+
+
 // The only parameter that is required is the first, which should be the Module name.
 // The other 2 parameters are optional.
 // The 2nd parameter is the title of the settings window, seen in the top left above the
@@ -242,6 +245,13 @@ class Settings {
         this.addDependency("Device/Healer", "p3 terms")
         this.setCategoryDescription('General', 'CookieUtils Settings');
         this.setSubcategoryDescription('General', 'Dungeons', 'Dungeons Features');
+
+        /*
+        this.registerListener("p3 terms", (statement) => {
+            RegisterSwitch();
+        });
+        */
+
     }
 }
 
